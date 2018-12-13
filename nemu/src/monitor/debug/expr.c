@@ -5,6 +5,7 @@
  */
 #include <sys/types.h>
 #include <regex.h>
+#include <stdlib.h>
 
 enum {
   TK_NOTYPE = 256, TK_EQ,
@@ -37,6 +38,10 @@ static struct rule {
 
 static regex_t re[NR_REGEX];
 
+bool check_parentheses(int p, int q);
+int eval(int p, int q);
+
+
 /* Rules are used for many times.
  * Therefore we compile them only once before any usage.
  */
@@ -61,6 +66,8 @@ typedef struct token {
 
 Token tokens[32];
 int nr_token;
+
+bool errexp;
 
 static bool make_token(char *e) {
   int position = 0;
@@ -112,9 +119,99 @@ uint32_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
+  errexp = false;
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
+  *success = !errexp;
+  return eval(0, nr_token);
+}
 
-  return 0;
+bool check_parentheses(int p, int q) {
+  bool ret = true;
+  if (tokens[p].type != '(' || tokens[q].type != ')')
+    ret = false;
+
+  int cnt = 0;  // un paired left-bracket
+  int i;
+  for (i = p; i <= q; i++) {
+    if (tokens[p].type == '(')
+      cnt++;
+    else if (tokens[p].type == ')') {
+      if (cnt == 1) { // example: (1 + 2) * (3 + 4)
+        if (i != q)
+          ret = false;
+      }
+      else if (cnt <= 0) {  // example: (1 + 2) ) - 3
+        errexp = true;
+        return false;
+      }
+      cnt--;
+    }
+  }
+  if (cnt != 0) { // brackets not in pairs
+    errexp = true;
+    return false;
+  }
+  return ret;
+}
+
+int eval(int p, int q) {
+  if (p > q || errexp) {
+    errexp = true;
+    printf("Bad Expression\n");
+    return 0;
+  }
+  else if (p == q) {
+    return atoi(tokens[p].str);
+  }
+  else if (check_parentheses(p, q) == true && !errexp) {
+    return eval(p + 1, q - 1);
+  }
+  else {
+    int op = -1;
+    int bracket_cnt = 0;
+    int optype = TK_NOTYPE;
+    int i;
+    for (i = q; i > p; i--) {
+      if (tokens[i].type == ')')
+        bracket_cnt++;
+      else if (tokens[i].type == '(')
+        bracket_cnt--;
+      else if (tokens[i].type == '+' || tokens[i].type == '-') {
+        if (bracket_cnt == 0) {
+          if (optype == TK_NOTYPE || optype == '*' || optype == '/') {
+            optype = tokens[i].type;
+            op = i;
+            break;
+          }
+        }
+      }
+      else if (tokens[i].type == '*' || tokens[i].type == '/') {
+        if (bracket_cnt == 0) {
+          if (optype == TK_NOTYPE) {
+            optype = tokens[i].type;
+            op = i;
+          }
+        }
+      }
+    }
+    if (op == -1) {
+      errexp = true;
+      return 0;
+    }
+    int val1 = eval(p, op - 1);
+    int val2 = eval(op + 1, q);
+    if (errexp) {
+      return 0;
+    }
+
+    switch (optype) {
+      case '+': return val1 + val2;
+      case '-': return val1 - val2;
+      case '*': return val1 * val2;
+      case '/': return val1 / val2;
+      default: assert(0);
+    }
+  }
+
 }

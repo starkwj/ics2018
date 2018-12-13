@@ -74,8 +74,14 @@ static int cmd_info(char *args) {
 }
 
 static int cmd_p(char *args) {
-  bool suc;
-  expr(args, &suc);
+  bool suc = true;
+  int ret = expr(args, &suc);
+  if (suc) {
+    printf("value = %d\n", ret);
+  }
+  else {
+    printf("Wrong expression!\n");
+  }
   return 0;
 }
 

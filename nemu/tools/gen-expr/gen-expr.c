@@ -7,8 +7,37 @@
 
 // this should be enough
 static char buf[65536];
+static int p;
+
+static inline int choose(int n) {
+  return rand() % n;
+}
+
+static inline void gen(char c) {
+  buf[p++] = c;
+}
+
+static inline void gen_num() {
+  buf[p++] = '1' + choose(9);
+}
+
+static inline void gen_rand_op() {
+  int op = choose(4);
+  switch (op) {
+    case 0: gen('+'); break;
+    case 1: gen('-'); break;
+    case 2: gen('*'); break;
+    case 3: gen('/'); break;
+    default: assert(0);
+  }
+}
+
 static inline void gen_rand_expr() {
-  buf[0] = '\0';
+  switch (choose(3)) {
+    case 0: gen_num(); break;
+    case 1: gen('('); gen_rand_expr(); gen(')'); break;
+    default: gen_rand_expr(); gen_rand_op(); gen_rand_expr(); break;
+  }
 }
 
 static char code_buf[65536];
@@ -29,7 +58,9 @@ int main(int argc, char *argv[]) {
   }
   int i;
   for (i = 0; i < loop; i ++) {
+    p = 0;
     gen_rand_expr();
+    code_buf[p] = '\0';
 
     sprintf(code_buf, code_format, buf);
 
@@ -45,10 +76,11 @@ int main(int argc, char *argv[]) {
     assert(fp != NULL);
 
     int result;
-    fscanf(fp, "%d", &result);
+    if (fscanf(fp, "%d", &result)) {
+      printf("%u %s\n", result, buf);
+    }
     pclose(fp);
 
-    printf("%u %s\n", result, buf);
   }
   return 0;
 }
