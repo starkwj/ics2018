@@ -128,7 +128,6 @@ uint32_t expr(char *e, bool *success) {
 }
 
 bool check_parentheses(int p, int q) {
-  printf("check:%d %d\n", p, q);
   bool ret = true;
   if (tokens[p].type != '(' || tokens[q].type != ')')
     ret = false;
@@ -136,9 +135,9 @@ bool check_parentheses(int p, int q) {
   int cnt = 0;  // un paired left-bracket
   int i;
   for (i = p; i <= q; i++) {
-    if (tokens[p].type == '(')
+    if (tokens[i].type == '(')
       cnt++;
-    else if (tokens[p].type == ')') {
+    else if (tokens[i].type == ')') {
       if (cnt == 1) { // example: (1 + 2) * (3 + 4)
         if (i != q)
           ret = false;
@@ -154,7 +153,6 @@ bool check_parentheses(int p, int q) {
     errexp = true;
     return false;
   }
-  printf("ret: %d %d\n", ret, errexp);
   return ret;
 }
 
