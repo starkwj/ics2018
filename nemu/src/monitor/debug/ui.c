@@ -38,6 +38,83 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_si(char *args) {
+  char *arg = strtok(NULL, " ");
+  if (arg == NULL) {
+    cpu_exec(1);
+  }
+  else {
+    int n = atoi(arg);
+    cpu_exec(n);
+  }
+  return 0;
+}
+
+static int cmd_info(char *args) {
+  char *arg = strtok(NULL, " ");
+  if (arg == NULL) {
+    printf("info: lack of operand\n");
+  }
+  else {
+    if (!strcmp(arg, "r")) {
+      int i;
+      for (i = R_EAX; i <= R_EDI; i ++) {
+        printf("%-12s%x\n", regsl[i], cpu.gpr[i]._32);
+      }
+      printf("%-12p%x\n", "eip", cpu.eip);
+    }
+    else if (!strcmp(arg, "w")) {
+      printf("not completed\n");
+    }
+    else {
+      printf("Unknown arg '%s'\n", arg);
+    }
+  }
+  return 0;
+}
+
+static int cmd_p(char *args) {
+  printf("not completed\n");
+  return 0;
+}
+
+static int cmd_x(char *args) {
+  char *arg = strtok(NULL, " ");
+  if (arg == NULL) {
+    printf("x: acquire arguments\n");
+    return 0;
+  }
+  int n = atoi(arg);
+  arg = strtok(NULL, " ");
+  if (arg == NULL) {
+    printf("x: acquire arguments\n");
+    return 0;
+  }
+  int addr = strtol(arg, NULL, 0);
+  int i;
+  for (i = 0; i < n; i++) {
+    if (i % 5 == 0)
+      printf("%x: ", addr);
+    vaddr_read(addr, 4);
+    n--;
+    addr += 4;
+    if (i % 5 == 4)
+      printf("\n");
+  }
+  return 0;
+}
+
+static int cmd_w(char *args) {
+  printf("not completed\n");
+  return 0;
+}
+
+static int cmd_d(char *args) {
+  printf("not completed\n");
+  return 0;
+}
+
+
 static struct {
   char *name;
   char *description;
@@ -46,9 +123,14 @@ static struct {
   { "help", "Display informations about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-
   /* TODO: Add more commands */
-
+  // wj 12.13
+  { "si", "Execute one or N machine instruction(s)", cmd_si },
+  { "info", "List program status", cmd_info },
+  { "p", "Print contents of a variable", cmd_p },
+  { "x", "Examining memory", cmd_x },
+  { "w", "Set watchpoint to EXPR", cmd_w },
+  { "d", "Delete watchpoint", cmd_d },
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
