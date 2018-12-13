@@ -74,7 +74,8 @@ static int cmd_info(char *args) {
 }
 
 static int cmd_p(char *args) {
-  printf("not completed\n");
+  bool suc;
+  expr(args, &suc);
   return 0;
 }
 
@@ -93,12 +94,12 @@ static int cmd_x(char *args) {
   int addr = strtol(arg, NULL, 0);
   int i;
   for (i = 0; i < n; i++) {
-    if (i % 5 == 0)
-      printf("%x: ", addr);
+    if (i % 4 == 0)
+      printf("0x%08x: ", addr);
     printf("%08x  ", vaddr_read(addr, 4));
     n--;
     addr += 4;
-    if (i % 5 == 4)
+    if (i % 4 == 3)
       printf("\n");
   }
   return 0;
