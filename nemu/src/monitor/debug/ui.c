@@ -61,7 +61,7 @@ static int cmd_info(char *args) {
       for (i = R_EAX; i <= R_EDI; i ++) {
         printf("%-12s%x\n", regsl[i], cpu.gpr[i]._32);
       }
-      printf("%-12p%x\n", "eip", cpu.eip);
+      printf("%-12s%x\n", "eip", cpu.eip);
     }
     else if (!strcmp(arg, "w")) {
       printf("not completed\n");
@@ -95,7 +95,7 @@ static int cmd_x(char *args) {
   for (i = 0; i < n; i++) {
     if (i % 5 == 0)
       printf("%x: ", addr);
-    vaddr_read(addr, 4);
+    printf("%x  ", vaddr_read(addr, 4));
     n--;
     addr += 4;
     if (i % 5 == 4)
