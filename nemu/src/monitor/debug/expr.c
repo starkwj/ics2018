@@ -128,6 +128,7 @@ uint32_t expr(char *e, bool *success) {
 }
 
 bool check_parentheses(int p, int q) {
+  printf("check:%d %d\n", p, q);
   bool ret = true;
   if (tokens[p].type != '(' || tokens[q].type != ')')
     ret = false;
