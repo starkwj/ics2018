@@ -122,8 +122,9 @@ uint32_t expr(char *e, bool *success) {
   errexp = false;
 
   /* TODO: Insert codes to evaluate the expression. */
+  int ret = eval(0, nr_token - 1);
   *success = !errexp;
-  return eval(0, nr_token - 1);
+  return ret;
 }
 
 bool check_parentheses(int p, int q) {
@@ -158,7 +159,6 @@ bool check_parentheses(int p, int q) {
 int eval(int p, int q) {
   if (p > q || errexp) {
     errexp = true;
-    printf("Bad Expression\n");
     return 0;
   }
   else if (p == q) {
