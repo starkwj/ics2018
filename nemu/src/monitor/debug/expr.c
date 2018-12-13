@@ -153,6 +153,7 @@ bool check_parentheses(int p, int q) {
     errexp = true;
     return false;
   }
+  printf("ret: %d %d\n", ret, errexp);
   return ret;
 }
 
