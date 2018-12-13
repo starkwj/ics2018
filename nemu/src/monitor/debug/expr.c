@@ -201,7 +201,6 @@ int eval(int p, int q) {
     }
     int val1 = eval(p, op - 1);
     int val2 = eval(op + 1, q);
-    printf("%d %d %d\n", val1, op, val2);
     if (errexp) {
       return 0;
     }
