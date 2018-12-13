@@ -156,6 +156,7 @@ bool check_parentheses(int p, int q) {
 }
 
 int eval(int p, int q) {
+  printf("%d %s %d %s\n", p, tokens[p].str, q, tokens[q].str);
   if (p > q || errexp) {
     errexp = true;
     printf("Bad Expression\n");
