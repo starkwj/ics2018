@@ -9,9 +9,9 @@
 
 enum {
   TK_NOTYPE = 256, TK_EQ,
-
   /* TODO: Add more token types */
-  TK_NUM
+  TK_NEQ, TK_AND,
+  TK_DEC, TK_HEX, TK_NEG, TK_DEREF
 };
 
 static struct rule {
@@ -24,14 +24,16 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},    // spaces
-  {"[0-9]+", TK_NUM},   // decimal number
+  {"[0-9]+", TK_DEC},   // decimal number
   {"\\+", '+'},         // plus
   {"\\-", '-'},         // minus
   {"\\*", '*'},         // multiple
   {"\\/", '/'},         // divide
   {"\\(", '('},         // left-bracket
   {"\\)", ')'},         // right-bracket
-  {"==", TK_EQ}         // equal
+  {"==", TK_EQ},        // equal
+  {"!=", TK_NEQ},       // not equal
+  {"&&", TK_AND},       // and
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -119,6 +121,20 @@ uint32_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
+  int i;
+  for (i = 0; i < nr_token; i++) {
+    if (tokens[i].type == '-' && (i == 0 || tokens[i - 1].type == '+' || tokens[i - 1].type == '-' ||
+      tokens[i - 1].type == '*' || tokens[i - 1].type == '/' || tokens[i - 1].type == '('))
+    {
+      tokens[i].type = TK_NEG;
+    }
+    if (tokens[i].type == '*' && (i == 0 || tokens[i - 1].type == '+' || tokens[i - 1].type == '-' ||
+      tokens[i - 1].type == '*' || tokens[i - 1].type == '/' || tokens[i - 1].type == '('))
+    {
+      tokens[i].type = TK_NEG;
+    }
+  }
+
   errexp = false;
 
   /* TODO: Insert codes to evaluate the expression. */
@@ -162,7 +178,7 @@ int eval(int p, int q) {
     return 0;
   }
   else if (p == q) {
-    return atoi(tokens[p].str);
+    return strtol(tokens[p].str, NULL, 0);
   }
   else if (check_parentheses(p, q) == true && !errexp) {
     return eval(p + 1, q - 1);
@@ -173,43 +189,87 @@ int eval(int p, int q) {
     int optype = TK_NOTYPE;
     int i;
     for (i = q; i > p; i--) {
-      if (tokens[i].type == ')')
-        bracket_cnt++;
-      else if (tokens[i].type == '(')
-        bracket_cnt--;
-      else if (tokens[i].type == '+' || tokens[i].type == '-') {
-        if (bracket_cnt == 0) {
-          if (optype == TK_NOTYPE || optype == '*' || optype == '/') {
-            optype = tokens[i].type;
-            op = i;
-            break;
-          }
-        }
-      }
-      else if (tokens[i].type == '*' || tokens[i].type == '/') {
-        if (bracket_cnt == 0) {
-          if (optype == TK_NOTYPE) {
+      switch (tokens[i].type) {
+        case ')':
+          bracket_cnt++;
+          break;
+        case '(':
+          bracket_cnt--;
+          break;
+        
+        case TK_AND:
+          if (bracket_cnt == 0 && optype != TK_AND) {
             optype = tokens[i].type;
             op = i;
           }
-        }
+          break;
+        
+        case TK_EQ:
+        case TK_NEQ:
+          if (bracket_cnt == 0) {
+            if (optype != TK_AND && optype != TK_EQ && optype != TK_NEQ) {
+              optype = tokens[i].type;
+              op = i;
+            }
+          }
+          break;
+        
+        case '+':
+        case '-':
+          if (bracket_cnt == 0) {
+            if (optype != TK_AND && optype != TK_EQ && optype != TK_NEQ && optype != '+' && optype != '-') {
+              optype = tokens[i].type;
+              op = i;
+            }
+          }
+          break;
+        
+        case '*':
+        case '/':
+          if (bracket_cnt == 0) {
+            if (optype != TK_AND && optype != TK_EQ && optype != TK_NEQ && optype != '+' && optype != '-' && optype != '*' && optype != '/') {
+              optype = tokens[i].type;
+              op = i;
+            }
+          }
+          break;
+        
+        case TK_NEG:
+        case TK_DEREF:
+          if (bracket_cnt == 0) {
+            if (optype != TK_AND && optype != TK_EQ && optype != TK_NEQ && optype != '+' && optype != '-' && optype != '*' && optype != '/') {
+              optype = tokens[i].type;
+              op = i;
+            }
+          }
+          break;
+        
+        default: assert(0);
       }
     }
     if (op == -1) {
       errexp = true;
       return 0;
     }
-    int val1 = eval(p, op - 1);
+    int val1 = 0;
+    if (op != p) {
+      val1 = eval(p, op - 1);
+    }
     int val2 = eval(op + 1, q);
     if (errexp) {
       return 0;
     }
 
     switch (optype) {
+      case TK_EQ: return val1 == val2;
+      case TK_NEQ: return val1 != val2;
+      case TK_AND: return val1 && val2;
       case '+': return val1 + val2;
       case '-': return val1 - val2;
       case '*': return val1 * val2;
       case '/': return val1 / val2;
+      case TK_NEG: return -val2;
+      case TK_DEREF: return vaddr_read(val2, 4);
       default: assert(0);
     }
   }
