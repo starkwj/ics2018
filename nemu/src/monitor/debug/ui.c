@@ -74,19 +74,13 @@ static int cmd_info(char *args) {
 }
 
 static int cmd_p(char *args) {
-  if (args == NULL) {
-    printf("Acquire argument\n");
-    return 0;
-  }
-  printf("X%sX\n", args);
-  
   bool suc = true;
   int ret = expr(args, &suc);
   if (suc) {
     printf("value = %d  (0x%x)\n", ret, ret);
   }
   else {
-    printf("Wrong expression!\n");
+    printf("Illegal expression: '%s'\n", args);
   }
   return 0;
 }
@@ -118,6 +112,17 @@ static int cmd_x(char *args) {
 
 static int cmd_w(char *args) {
   printf("not completed\n");
+  bool suc = true;
+  int ret = expr(args, &suc);
+  if (suc) {
+    WP *wp = new_wp();
+    wp->e = args;
+    wp->value = ret;
+    printf("Watchpoint %d is set: %s\n", wp->NO, wp->e);
+  }
+  else {
+    printf("Illegal expression: '%s'\n", args);
+  }
   return 0;
 }
 

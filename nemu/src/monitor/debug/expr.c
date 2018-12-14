@@ -124,6 +124,10 @@ uint32_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
+  if (nr_token == 0) {
+    *success = false;
+    return 0;
+  }
   int i;
   for (i = 0; i < nr_token; i++) {
     if (tokens[i].type == '-' && (i == 0 || (tokens[i - 1].type != TK_DEC && tokens[i - 1].type != TK_HEX && tokens[i - 1].type != TK_REG)))
