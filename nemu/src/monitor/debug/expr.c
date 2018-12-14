@@ -11,7 +11,7 @@ enum {
   TK_NOTYPE = 256, TK_EQ,
   /* TODO: Add more token types */
   TK_NEQ, TK_AND,
-  TK_DEC, TK_HEX, TK_NEG, TK_DEREF
+  TK_DEC, TK_HEX, TK_NEG, TK_DEREF, TK_REG
 };
 
 static struct rule {
@@ -23,18 +23,19 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
 
-  {" +", TK_NOTYPE},    // spaces
+  {" +", TK_NOTYPE},        // spaces
+  {"\\$[a-z]+", TK_REG},    // reg
   {"0[Xx][0-9]+", TK_HEX},  // hexadecimal number
-  {"[0-9]+", TK_DEC},   // decimal number
-  {"\\+", '+'},         // plus
-  {"\\-", '-'},         // minus
-  {"\\*", '*'},         // multiple
-  {"\\/", '/'},         // divide
-  {"\\(", '('},         // left-bracket
-  {"\\)", ')'},         // right-bracket
-  {"==", TK_EQ},        // equal
-  {"!=", TK_NEQ},       // not equal
-  {"&&", TK_AND},       // and
+  {"[0-9]+", TK_DEC},       // decimal number
+  {"\\+", '+'},             // plus
+  {"\\-", '-'},             // minus
+  {"\\*", '*'},             // multiple
+  {"\\/", '/'},             // divide
+  {"\\(", '('},             // left-bracket
+  {"\\)", ')'},             // right-bracket
+  {"==", TK_EQ},            // equal
+  {"!=", TK_NEQ},           // not equal
+  {"&&", TK_AND},           // and
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -177,7 +178,26 @@ int eval(int p, int q) {
     return 0;
   }
   else if (p == q) {
-    return strtol(tokens[p].str, NULL, 0);
+    if (tokens[p].type == TK_REG) {
+      if (!strcmp("eip", tokens[p].str + 1)) {
+        return cpu.eip;
+      }
+      int i;
+      for (i = 0; i < 8; i++) {
+        if (!strcmp(regsl[i], tokens[p].str + 1)) {
+          return reg_l(i);
+        }
+        if (!strcmp(regsw[i], tokens[p].str + 1)) {
+          return reg_w(i);
+        }
+        if (!strcmp(regsb[i], tokens[p].str + 1)) {
+          return reg_b(i);
+        }
+      }
+    }
+    else {
+      return strtol(tokens[p].str, NULL, 0);
+    }
   }
   else if (check_parentheses(p, q) == true && !errexp) {
     return eval(p + 1, q - 1);
