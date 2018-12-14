@@ -127,9 +127,8 @@ uint32_t expr(char *e, bool *success) {
     if (tokens[i].type == '-' && (i == 0 || (tokens[i - 1].type != TK_DEC && tokens[i - 1].type != TK_HEX)))
     {
       tokens[i].type = TK_NEG;
-      printf("test1\n");
     }
-    if (tokens[i].type == '*' && (i == 0 || (tokens[i - 1].type != TK_DEC && tokens[i - 1].type != TK_HEX)))
+    else if (tokens[i].type == '*' && (i == 0 || (tokens[i - 1].type != TK_DEC && tokens[i - 1].type != TK_HEX)))
     {
       tokens[i].type = TK_DEREF;
     }
@@ -183,10 +182,11 @@ int eval(int p, int q) {
   else if (check_parentheses(p, q) == true && !errexp) {
     return eval(p + 1, q - 1);
   }
-  else {
+  else if (!errexp) {
     int op = -1;
     int bracket_cnt = 0;
     int optype = TK_NOTYPE;
+    printf("get\n");
     int i;
     for (i = q; i > p; i--) {
       switch (tokens[i].type) {
@@ -272,5 +272,5 @@ int eval(int p, int q) {
       default: assert(0);
     }
   }
-
+  return 0;
 }
