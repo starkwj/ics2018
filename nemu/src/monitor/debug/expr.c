@@ -243,10 +243,7 @@ int eval(int p, int q) {
             }
           }
           break;
-        
-        default:
-          printf("token: %s\n", tokens[i].str);
-          assert(0);
+        default: break;
       }
     }
     if (op == -1) {
