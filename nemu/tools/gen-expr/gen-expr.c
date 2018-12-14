@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
   for (i = 0; i < loop; i ++) {
     p = 0;
     gen_rand_expr();
-    code_buf[p] = '\0';
+    buf[p] = '\0';
 
     sprintf(code_buf, code_format, buf);
 
