@@ -187,7 +187,7 @@ int eval(int p, int q) {
     int bracket_cnt = 0;
     int optype = TK_NOTYPE;
     int i;
-    for (i = q; i > p; i--) {
+    for (i = q; i >= p; i--) {
       switch (tokens[i].type) {
         case ')':
           bracket_cnt++;
@@ -245,7 +245,7 @@ int eval(int p, int q) {
         default: break;
       }
     }
-    printf("op: %d type: %d\n", op, optype);
+
     if (op == -1) {
       errexp = true;
       return 0;
