@@ -25,6 +25,7 @@ static struct rule {
 
   {" +", TK_NOTYPE},    // spaces
   {"[0-9]+", TK_DEC},   // decimal number
+  {"0[Xx][0-9]+", TK_HEX},  // hexadecimal number
   {"\\+", '+'},         // plus
   {"\\-", '-'},         // minus
   {"\\*", '*'},         // multiple
