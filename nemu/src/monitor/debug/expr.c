@@ -126,11 +126,11 @@ uint32_t expr(char *e, bool *success) {
   }
   int i;
   for (i = 0; i < nr_token; i++) {
-    if (tokens[i].type == '-' && (i == 0 || (tokens[i - 1].type != TK_DEC && tokens[i - 1].type != TK_HEX)))
+    if (tokens[i].type == '-' && (i == 0 || (tokens[i - 1].type != TK_DEC && tokens[i - 1].type != TK_HEX && tokens[i - 1].type != TK_REG)))
     {
       tokens[i].type = TK_NEG;
     }
-    else if (tokens[i].type == '*' && (i == 0 || (tokens[i - 1].type != TK_DEC && tokens[i - 1].type != TK_HEX)))
+    else if (tokens[i].type == '*' && (i == 0 || (tokens[i - 1].type != TK_DEC && tokens[i - 1].type != TK_HEX && tokens[i - 1].type != TK_REG)))
     {
       tokens[i].type = TK_DEREF;
     }
