@@ -74,6 +74,12 @@ static int cmd_info(char *args) {
 }
 
 static int cmd_p(char *args) {
+  if (args == NULL) {
+    printf("Acquire argument\n");
+    return 0;
+  }
+  printf("%s\n", args);
+  
   bool suc = true;
   int ret = expr(args, &suc);
   if (suc) {
