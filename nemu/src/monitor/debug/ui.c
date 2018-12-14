@@ -77,7 +77,7 @@ static int cmd_p(char *args) {
   bool suc = true;
   int ret = expr(args, &suc);
   if (suc) {
-    printf("value = %d\n", ret);
+    printf("value = %d  (0x%x)\n", ret, ret);
   }
   else {
     printf("Wrong expression!\n");

@@ -189,7 +189,6 @@ int eval(int p, int q) {
           return reg_l(i);
         }
         if (!strcmp(regsw[i], tokens[p].str + 1)) {
-          printf("%d %x\n", i, reg_w(i));
           return reg_w(i);
         }
         if (!strcmp(regsb[i], tokens[p].str + 1)) {
