@@ -186,7 +186,6 @@ int eval(int p, int q) {
     int op = -1;
     int bracket_cnt = 0;
     int optype = TK_NOTYPE;
-    printf("get\n");
     int i;
     for (i = q; i > p; i--) {
       switch (tokens[i].type) {
@@ -251,14 +250,15 @@ int eval(int p, int q) {
       return 0;
     }
     int val1 = 0;
+    printf("op: %d type: %d\n", op, optype);
     if (op != p) {
       val1 = eval(p, op - 1);
     }
     int val2 = eval(op + 1, q);
+
     if (errexp) {
       return 0;
     }
-    printf("%d\n", optype);
     switch (optype) {
       case TK_EQ: return val1 == val2;
       case TK_NEQ: return val1 != val2;
