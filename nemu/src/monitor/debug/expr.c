@@ -124,13 +124,11 @@ uint32_t expr(char *e, bool *success) {
   }
   int i;
   for (i = 0; i < nr_token; i++) {
-    if (tokens[i].type == '-' && (i == 0 || tokens[i - 1].type == '+' || tokens[i - 1].type == '-' ||
-      tokens[i - 1].type == '*' || tokens[i - 1].type == '/' || tokens[i - 1].type == '('))
+    if (tokens[i].type == '-' && (i == 0 || (tokens[i - 1].type != TK_DEC && tokens[i - 1].type != TK_HEX)))
     {
       tokens[i].type = TK_NEG;
     }
-    if (tokens[i].type == '*' && (i == 0 || tokens[i - 1].type == '+' || tokens[i - 1].type == '-' ||
-      tokens[i - 1].type == '*' || tokens[i - 1].type == '/' || tokens[i - 1].type == '('))
+    if (tokens[i].type == '*' && (i == 0 || (tokens[i - 1].type != TK_DEC && tokens[i - 1].type != TK_HEX)))
     {
       tokens[i].type = TK_DEREF;
     }
@@ -259,7 +257,7 @@ int eval(int p, int q) {
     if (errexp) {
       return 0;
     }
-
+    printf("%d\n", optype);
     switch (optype) {
       case TK_EQ: return val1 == val2;
       case TK_NEQ: return val1 != val2;
