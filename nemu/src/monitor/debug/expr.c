@@ -132,7 +132,7 @@ uint32_t expr(char *e, bool *success) {
     if (tokens[i].type == '*' && (i == 0 || tokens[i - 1].type == '+' || tokens[i - 1].type == '-' ||
       tokens[i - 1].type == '*' || tokens[i - 1].type == '/' || tokens[i - 1].type == '('))
     {
-      tokens[i].type = TK_NEG;
+      tokens[i].type = TK_DEREF;
     }
   }
 
