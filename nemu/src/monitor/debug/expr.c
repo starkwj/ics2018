@@ -245,12 +245,12 @@ int eval(int p, int q) {
         default: break;
       }
     }
+    printf("op: %d type: %d\n", op, optype);
     if (op == -1) {
       errexp = true;
       return 0;
     }
     int val1 = 0;
-    printf("op: %d type: %d\n", op, optype);
     if (op != p) {
       val1 = eval(p, op - 1);
     }
