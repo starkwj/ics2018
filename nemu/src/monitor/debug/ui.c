@@ -78,7 +78,7 @@ static int cmd_p(char *args) {
     printf("Acquire argument\n");
     return 0;
   }
-  printf("%s\n", args);
+  printf("X%sX\n", args);
   
   bool suc = true;
   int ret = expr(args, &suc);
