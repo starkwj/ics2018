@@ -53,7 +53,7 @@ static int cmd_si(char *args) {
 static int cmd_info(char *args) {
   char *arg = strtok(NULL, " ");
   if (arg == NULL) {
-    printf("info: lack of operand\n");
+    printf("info: missing operand\n");
   }
   else {
     if (!strcmp(arg, "r")) {
@@ -88,13 +88,13 @@ static int cmd_p(char *args) {
 static int cmd_x(char *args) {
   char *arg = strtok(NULL, " ");
   if (arg == NULL) {
-    printf("x: Arguments required\n");
+    printf("x: missing operand\n");
     return 0;
   }
   int n = atoi(arg);
   arg = strtok(NULL, " ");
   if (arg == NULL) {
-    printf("x: Arguments required\n");
+    printf("x: missing operand\n");
     return 0;
   }
   int addr = strtol(arg, NULL, 0);
@@ -113,7 +113,7 @@ static int cmd_x(char *args) {
 static int cmd_w(char *args) {
   char *arg = strtok(NULL, " ");
   if (!arg) {
-    printf("w: Argument required\n");
+    printf("w: missing operand\n");
     return 0;
   }
   bool suc = true;
@@ -133,7 +133,7 @@ static int cmd_w(char *args) {
 static int cmd_d(char *args) {
   char *arg = strtok(NULL, " ");
   if (!arg) {
-    printf("d: Argument required\n");
+    printf("d: missing operand\n");
     return 0;
   }
   free_wp_no(atoi(arg));

@@ -86,6 +86,7 @@ bool check_wp() {
       printf("Watchpoint %d 's value changed, from %u to %u\n", p->NO, p->value, newvalue);
       p->value = newvalue;
     }
+    p = p->next;
   }
   return ret;
 }
