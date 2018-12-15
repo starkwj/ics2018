@@ -43,8 +43,8 @@ void cpu_exec(uint64_t n) {
     /* TODO: check watchpoints here. */
     if (check_wp()) {
       nemu_state = NEMU_STOP;
+      printf("Watchpoint(s) has been triggered\n");
     }
-    printf("Watchpoint(s) has been triggered\n");
 #endif
 
 #ifdef HAS_IOE
