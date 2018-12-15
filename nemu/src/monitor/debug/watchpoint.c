@@ -31,7 +31,7 @@ WP* new_wp() {
     head->next = NULL;
   }
   else {
-    p->next = head->next;
+    p->next = head;
     head = p;
   }
   return head;
