@@ -127,11 +127,12 @@ static int cmd_w(char *args) {
 }
 
 static int cmd_d(char *args) {
-  if (!args) {
+  char *arg = strtok(NULL, " ");
+  if (!arg) {
     printf("d: acquire arguments\n");
     return 0;
   }
-  free_wp_no(atoi(args));
+  free_wp_no(atoi(arg));
   return 0;
 }
 
