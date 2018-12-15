@@ -95,7 +95,7 @@ bool check_wp() {
 
 void show_wp() {
   if (head == NULL) {
-    printf("No watchpoint is setted\n");
+    printf("No watchpoint is setted.\n");
     return;
   }
 
@@ -103,6 +103,7 @@ void show_wp() {
   WP *p = head;
   while (p) {
     printf("%-12d%-12s%-10u\n", p->NO, p->e, p->value);
+    p = p->next;
   }
   return;
 }
