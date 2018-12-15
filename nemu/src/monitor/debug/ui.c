@@ -117,11 +117,11 @@ static int cmd_w(char *args) {
     return 0;
   }
   bool suc = true;
+  while (*arg++ == ' ');
   uint32_t ret = expr(arg, &suc);
-  printf("p: %p\n", arg);
   if (suc) {
     WP *wp = new_wp();
-    wp->e = arg;
+    strcpy(wp->e, arg);
     wp->value = ret;
     printf("Watchpoint %d is set: %s\n", wp->NO, wp->e);
   }
