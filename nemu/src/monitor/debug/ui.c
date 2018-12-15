@@ -127,9 +127,10 @@ static int cmd_w(char *args) {
 }
 
 static int cmd_d(char *args) {
-  int no = atoi(args);
-  printf("%d\n", no);
-  free_wp_no(no);
+  if (!args) {
+    printf("d: acquire arguments\n");
+  }
+  free_wp_no(atoi(args));
   return 0;
 }
 
