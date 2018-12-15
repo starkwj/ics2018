@@ -74,3 +74,18 @@ void free_wp_no(int no) {
     free_wp(p);
   }
 }
+
+bool check_wp() {
+  WP *p = head;
+  bool ret = false;
+  while (p != NULL) {
+    bool suc;
+    uint32_t newvalue = expr(p->e, &suc);
+    if (newvalue != p->value) {
+      ret = true;
+      printf("Watchpoint %d 's value changed, from %u to %u\n", p->NO, p->value, newvalue);
+      p->value = newvalue;
+    }
+  }
+  return ret;
+}

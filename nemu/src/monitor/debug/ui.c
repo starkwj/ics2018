@@ -75,9 +75,9 @@ static int cmd_info(char *args) {
 
 static int cmd_p(char *args) {
   bool suc = true;
-  int ret = expr(args, &suc);
+  uint32_t ret = expr(args, &suc);
   if (suc) {
-    printf("value = %d  (0x%x)\n", ret, ret);
+    printf("value = %u  (0x%x)\n", ret, ret);
   }
   else {
     printf("Illegal expression: '%s'\n", args);
@@ -88,13 +88,13 @@ static int cmd_p(char *args) {
 static int cmd_x(char *args) {
   char *arg = strtok(NULL, " ");
   if (arg == NULL) {
-    printf("x: acquire arguments\n");
+    printf("x: Arguments required\n");
     return 0;
   }
   int n = atoi(arg);
   arg = strtok(NULL, " ");
   if (arg == NULL) {
-    printf("x: acquire arguments\n");
+    printf("x: Arguments required\n");
     return 0;
   }
   int addr = strtol(arg, NULL, 0);
@@ -111,17 +111,21 @@ static int cmd_x(char *args) {
 }
 
 static int cmd_w(char *args) {
-  printf("not completed\n");
+  char *arg = strtok(NULL, " ");
+  if (!arg) {
+    printf("w: Argument required\n");
+    return 0;
+  }
   bool suc = true;
-  int ret = expr(args, &suc);
+  uint32_t ret = expr(arg, &suc);
   if (suc) {
     WP *wp = new_wp();
-    wp->e = args;
+    wp->e = arg;
     wp->value = ret;
     printf("Watchpoint %d is set: %s\n", wp->NO, wp->e);
   }
   else {
-    printf("Illegal expression: '%s'\n", args);
+    printf("Illegal expression: '%s'\n", arg);
   }
   return 0;
 }
@@ -129,7 +133,7 @@ static int cmd_w(char *args) {
 static int cmd_d(char *args) {
   char *arg = strtok(NULL, " ");
   if (!arg) {
-    printf("d: acquire arguments\n");
+    printf("d: Argument required\n");
     return 0;
   }
   free_wp_no(atoi(arg));

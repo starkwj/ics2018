@@ -43,7 +43,7 @@ static struct rule {
 static regex_t re[NR_REGEX];
 
 bool check_parentheses(int p, int q);
-int eval(int p, int q);
+uint32_t eval(int p, int q);
 
 
 /* Rules are used for many times.
@@ -143,7 +143,7 @@ uint32_t expr(char *e, bool *success) {
   errexp = false;
 
   /* TODO: Insert codes to evaluate the expression. */
-  int ret = eval(0, nr_token - 1);
+  uint32_t ret = eval(0, nr_token - 1);
   *success = !errexp;
   return ret;
 }
@@ -177,7 +177,7 @@ bool check_parentheses(int p, int q) {
   return ret;
 }
 
-int eval(int p, int q) {
+uint32_t eval(int p, int q) {
   if (p > q || errexp) {
     errexp = true;
     return 0;
@@ -275,11 +275,11 @@ int eval(int p, int q) {
       errexp = true;
       return 0;
     }
-    int val1 = 0;
+    uint32_t val1 = 0;
     if (op != p) {
       val1 = eval(p, op - 1);
     }
-    int val2 = eval(op + 1, q);
+    uint32_t val2 = eval(op + 1, q);
 
     if (errexp) {
       return 0;
