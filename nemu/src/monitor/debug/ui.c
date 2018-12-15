@@ -127,7 +127,9 @@ static int cmd_w(char *args) {
 }
 
 static int cmd_d(char *args) {
-  printf("not completed\n");
+  int no = atoi(args);
+  printf("%d\n", no);
+  free_wp_no(no);
   return 0;
 }
 

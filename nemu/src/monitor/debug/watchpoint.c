@@ -62,3 +62,15 @@ void free_wp(WP *wp) {
   free_ = wp;
 }
 
+void free_wp_no(int no) {
+  WP *p = head;
+  while (p != NULL && p->NO != no) {
+    p = p->next;
+  }
+  if (!p) {
+    printf("Watchpoint %d is not on!\n", no);
+  }
+  else {
+    free_wp(p);
+  }
+}
