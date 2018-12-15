@@ -118,6 +118,7 @@ static int cmd_w(char *args) {
   }
   bool suc = true;
   uint32_t ret = expr(arg, &suc);
+  printf("p: %p\n", arg);
   if (suc) {
     WP *wp = new_wp();
     wp->e = arg;
