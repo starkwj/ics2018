@@ -102,7 +102,7 @@ void show_wp() {
   printf("%-12s%-12s%-10s\n", "watchpoint", "expression", "value");
   WP *p = head;
   while (p) {
-    printf("%-12d%-12s%-10u\n", p->NO, p->e, p->value);
+    printf("%-12d%-12s%u(0x%x)\n", p->NO, p->e, p->value, p->value);
     p = p->next;
   }
   return;
