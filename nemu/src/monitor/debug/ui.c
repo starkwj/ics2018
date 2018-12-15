@@ -59,9 +59,9 @@ static int cmd_info(char *args) {
     if (!strcmp(arg, "r")) {
       int i;
       for (i = R_EAX; i <= R_EDI; i ++) {
-        printf("%-12s%x\n", regsl[i], cpu.gpr[i]._32);
+        printf("%-12s0x%08x\n", regsl[i], cpu.gpr[i]._32);
       }
-      printf("%-12s%x\n", "eip", cpu.eip);
+      printf("%-12s0x%08x\n", "eip", cpu.eip);
     }
     else if (!strcmp(arg, "w")) {
       printf("not completed\n");

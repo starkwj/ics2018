@@ -83,7 +83,7 @@ bool check_wp() {
     uint32_t newvalue = expr(p->e, &suc);
     if (newvalue != p->value) {
       ret = true;
-      printf("Watchpoint %d 's value changed, from %u to %u\n", p->NO, p->value, newvalue);
+      printf("Value of watchpoint %d (%s) changed, from %u to %u\n", p->NO, p->e, p->value, newvalue);
       p->value = newvalue;
     }
     p = p->next;
