@@ -26,15 +26,18 @@ WP* new_wp() {
   }
   WP *p = free_;
   free_ = free_->next;
+  p->next = NULL;
   if (head == NULL) {
     head = p;
-    head->next = NULL;
   }
   else {
-    p->next = head;
-    head = p;
+    WP *q = head;
+    while (q->next) {
+      q = q->next;
+    }
+    q->next = p;
   }
-  return head;
+  return p;
 }
 
 void free_wp(WP *wp) {
@@ -89,3 +92,18 @@ bool check_wp() {
   }
   return ret;
 }
+
+void show_wp() {
+  if (head == NULL) {
+    printf("No watchpoint is setted\n");
+    return;
+  }
+
+  printf("%-12s%-12s%-10s\n", "watchpoint", "expression", "value");
+  WP *p = head;
+  while (p) {
+    printf("%-12d%-12s%-10u\n", p->NO, p->e, p->value);
+  }
+  return;
+}
+

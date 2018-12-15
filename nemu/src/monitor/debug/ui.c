@@ -64,7 +64,7 @@ static int cmd_info(char *args) {
       printf("%-12s0x%08x\n", "eip", cpu.eip);
     }
     else if (!strcmp(arg, "w")) {
-      printf("not completed\n");
+      show_wp();
     }
     else {
       printf("Unknown arg '%s'\n", arg);
