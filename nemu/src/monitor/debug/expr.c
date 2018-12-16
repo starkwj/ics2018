@@ -89,7 +89,7 @@ static bool make_token(char *e) {
 
         if (substr_len >= 32) {
           *(substr_start + substr_len) = '\0';
-          printf("make_token: token %s is too long.\n", substr_start);
+          printf("make_token: token '%s' is too long.\n", substr_start);
           return false;
         }
 
