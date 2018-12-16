@@ -38,6 +38,109 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_si(char *args) {
+  char *arg = strtok(NULL, " ");
+  if (arg == NULL) {
+    cpu_exec(1);
+  }
+  else {
+    int n = atoi(arg);
+    cpu_exec(n);
+  }
+  return 0;
+}
+
+static int cmd_info(char *args) {
+  char *arg = strtok(NULL, " ");
+  if (arg == NULL) {
+    printf("info: missing operand\n");
+  }
+  else {
+    if (!strcmp(arg, "r")) {
+      int i;
+      for (i = R_EAX; i <= R_EDI; i ++) {
+        printf("%-12s0x%08x\n", regsl[i], cpu.gpr[i]._32);
+      }
+      printf("%-12s0x%08x\n", "eip", cpu.eip);
+    }
+    else if (!strcmp(arg, "w")) {
+      show_wp();
+    }
+    else {
+      printf("Unknown arg '%s'\n", arg);
+    }
+  }
+  return 0;
+}
+
+static int cmd_p(char *args) {
+  bool suc = true;
+  uint32_t ret = expr(args, &suc);
+  if (suc) {
+    printf("value = %u  (0x%x)\n", ret, ret);
+  }
+  else {
+    printf("Illegal expression: '%s'\n", args);
+  }
+  return 0;
+}
+
+static int cmd_x(char *args) {
+  char *arg = strtok(NULL, " ");
+  if (arg == NULL) {
+    printf("x: missing operand\n");
+    return 0;
+  }
+  int n = atoi(arg);
+  arg = strtok(NULL, " ");
+  if (arg == NULL) {
+    printf("x: missing operand\n");
+    return 0;
+  }
+  int addr = strtol(arg, NULL, 0);
+  int i;
+  for (i = 0; i < n; i++) {
+    if (i % 4 == 0)
+      printf("0x%08x: ", addr);
+    printf("%08x  ", vaddr_read(addr, 4));
+    addr += 4;
+    if (i % 4 == 3 || i == n - 1)
+      printf("\n");
+  }
+  return 0;
+}
+
+static int cmd_w(char *args) {
+  char *arg = strtok(NULL, " ");
+  if (!arg) {
+    printf("w: missing operand\n");
+    return 0;
+  }
+  bool suc = true;
+  uint32_t ret = expr(arg, &suc);
+  if (suc) {
+    WP *wp = new_wp();
+    strcpy(wp->e, arg);
+    wp->value = ret;
+    printf("Watchpoint %d is set: %s\n", wp->NO, wp->e);
+  }
+  else {
+    printf("Illegal expression: '%s'\n", arg);
+  }
+  return 0;
+}
+
+static int cmd_d(char *args) {
+  char *arg = strtok(NULL, " ");
+  if (!arg) {
+    printf("d: missing operand\n");
+    return 0;
+  }
+  free_wp_no(atoi(arg));
+  return 0;
+}
+
+
 static struct {
   char *name;
   char *description;
@@ -46,9 +149,14 @@ static struct {
   { "help", "Display informations about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-
   /* TODO: Add more commands */
-
+  // wj 12.13
+  { "si", "Execute one or N machine instruction(s)", cmd_si },
+  { "info", "List program status", cmd_info },
+  { "p", "Print contents of a variable", cmd_p },
+  { "x", "Examining memory", cmd_x },
+  { "w", "Set watchpoint to EXPR", cmd_w },
+  { "d", "Delete watchpoint", cmd_d },
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
