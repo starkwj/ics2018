@@ -31,8 +31,8 @@ static struct rule {
   {"\\-", '-'},             // minus
   {"\\*", '*'},             // multiple
   {"\\/", '/'},             // divide
-  {"\\(", '('},             // left-bracket
-  {"\\)", ')'},             // right-bracket
+  {"\\(", '('},             // left-parenthese
+  {"\\)", ')'},             // right-parenthese
   {"==", TK_EQ},            // equal
   {"!=", TK_NEQ},           // not equal
   {"&&", TK_AND},           // and
@@ -153,7 +153,7 @@ bool check_parentheses(int p, int q) {
   if (tokens[p].type != '(' || tokens[q].type != ')')
     ret = false;
 
-  int cnt = 0;  // un paired left-bracket
+  int cnt = 0;  // un paired left-parenthese
   int i;
   for (i = p; i <= q; i++) {
     if (tokens[i].type == '(')
@@ -170,7 +170,7 @@ bool check_parentheses(int p, int q) {
       cnt--;
     }
   }
-  if (cnt != 0) { // brackets not in pairs
+  if (cnt != 0) { // parentheses not in pairs
     errexp = true;
     return false;
   }
@@ -209,20 +209,20 @@ uint32_t eval(int p, int q) {
   }
   else if (!errexp) {
     int op = -1;
-    int bracket_cnt = 0;
+    int parenthese_cnt = 0;
     int optype = TK_NOTYPE;
     int i;
     for (i = q; i >= p; i--) {
       switch (tokens[i].type) {
         case ')':
-          bracket_cnt++;
+          parenthese_cnt++;
           break;
         case '(':
-          bracket_cnt--;
+          parenthese_cnt--;
           break;
         
         case TK_AND:
-          if (bracket_cnt == 0 && optype != TK_AND) {
+          if (parenthese_cnt == 0 && optype != TK_AND) {
             optype = tokens[i].type;
             op = i;
           }
@@ -230,7 +230,7 @@ uint32_t eval(int p, int q) {
         
         case TK_EQ:
         case TK_NEQ:
-          if (bracket_cnt == 0) {
+          if (parenthese_cnt == 0) {
             if (optype != TK_AND && optype != TK_EQ && optype != TK_NEQ) {
               optype = tokens[i].type;
               op = i;
@@ -240,7 +240,7 @@ uint32_t eval(int p, int q) {
         
         case '+':
         case '-':
-          if (bracket_cnt == 0) {
+          if (parenthese_cnt == 0) {
             if (optype != TK_AND && optype != TK_EQ && optype != TK_NEQ && optype != '+' && optype != '-') {
               optype = tokens[i].type;
               op = i;
@@ -250,7 +250,7 @@ uint32_t eval(int p, int q) {
         
         case '*':
         case '/':
-          if (bracket_cnt == 0) {
+          if (parenthese_cnt == 0) {
             if (optype != TK_AND && optype != TK_EQ && optype != TK_NEQ && optype != '+' && optype != '-' && optype != '*' && optype != '/') {
               optype = tokens[i].type;
               op = i;
@@ -260,7 +260,7 @@ uint32_t eval(int p, int q) {
         
         case TK_NEG:
         case TK_DEREF:
-          if (bracket_cnt == 0) {
+          if (parenthese_cnt == 0) {
             if (optype != TK_AND && optype != TK_EQ && optype != TK_NEQ && optype != '+' && optype != '-' && optype != '*' && optype != '/') {
               optype = tokens[i].type;
               op = i;
