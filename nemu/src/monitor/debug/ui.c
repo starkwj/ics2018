@@ -111,21 +111,16 @@ static int cmd_x(char *args) {
 }
 
 static int cmd_w(char *args) {
-  char *arg = strtok(NULL, " ");
-  if (!arg) {
-    printf("w: missing operand\n");
-    return 0;
-  }
   bool suc = true;
-  uint32_t ret = expr(arg, &suc);
+  uint32_t ret = expr(args, &suc);
   if (suc) {
     WP *wp = new_wp();
-    strcpy(wp->e, arg);
+    strcpy(wp->e, args);
     wp->value = ret;
     printf("Watchpoint %d is set: %s\n", wp->NO, wp->e);
   }
   else {
-    printf("Illegal expression: '%s'\n", arg);
+    printf("Illegal expression: '%s'\n", args);
   }
   return 0;
 }
