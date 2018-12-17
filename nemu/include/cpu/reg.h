@@ -34,6 +34,24 @@ typedef struct {
 
   vaddr_t eip;
 
+  union {
+    struct {
+      unsigned CF :1;
+      unsigned    :1;
+      unsigned PF :1;
+      unsigned    :1;
+      unsigned AF :1;
+      unsigned    :1;
+      unsigned ZF :1;
+      unsigned SF :1;
+      unsigned TF :1;
+      unsigned IF :1;
+      unsigned DF :1;
+      unsigned OF :1;
+    };
+    rtlreg_t _32;
+  } eflags;
+
 } CPU_state;
 
 extern CPU_state cpu;
