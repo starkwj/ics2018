@@ -74,6 +74,9 @@ int nr_token;
 bool errexp;
 
 static bool make_token(char *e) {
+  if (e == NULL) {
+    return false;
+  }
   int position = 0;
   int i;
   regmatch_t pmatch;
@@ -136,11 +139,11 @@ uint32_t expr(char *e, bool *success) {
   }
   int i;
   for (i = 0; i < nr_token; i++) {
-    if (tokens[i].type == '-' && (i == 0 || (tokens[i - 1].type != TK_DEC && tokens[i - 1].type != TK_HEX && tokens[i - 1].type != TK_REG)))
+    if (tokens[i].type == '-' && (i == 0 || (tokens[i - 1].type != TK_DEC && tokens[i - 1].type != TK_HEX && tokens[i - 1].type != TK_REG && tokens[i - 1].type != ')')))
     {
       tokens[i].type = TK_NEG;
     }
-    else if (tokens[i].type == '*' && (i == 0 || (tokens[i - 1].type != TK_DEC && tokens[i - 1].type != TK_HEX && tokens[i - 1].type != TK_REG)))
+    else if (tokens[i].type == '*' && (i == 0 || (tokens[i - 1].type != TK_DEC && tokens[i - 1].type != TK_HEX && tokens[i - 1].type != TK_REG && tokens[i - 1].type != ')')))
     {
       tokens[i].type = TK_DEREF;
     }
