@@ -74,6 +74,9 @@ int nr_token;
 bool errexp;
 
 static bool make_token(char *e) {
+  if (e == NULL) {
+    return false;
+  }
   int position = 0;
   int i;
   regmatch_t pmatch;
