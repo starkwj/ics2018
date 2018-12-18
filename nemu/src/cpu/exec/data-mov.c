@@ -7,6 +7,7 @@ make_EHelper(mov) {
 
 make_EHelper(push) {
   // only 4 bytes
+  assert(!decoding.is_operand_size_16);
   rtl_push(&id_dest->val);
 
   print_asm_template1(push);
@@ -14,6 +15,7 @@ make_EHelper(push) {
 
 make_EHelper(pop) {
   // only 4 bytes
+  assert(!decoding.is_operand_size_16);
   rtl_pop(&id_dest->val);
   operand_write(id_dest, &id_dest->val);
 
