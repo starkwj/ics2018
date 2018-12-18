@@ -151,11 +151,13 @@ static inline void rtl_sr(int r, const rtlreg_t* src1, int width) {
 
 static inline void rtl_not(rtlreg_t *dest, const rtlreg_t* src1) {
   // dest <- ~src1
+  // TODO();
   *dest = ~*src1;
 }
 
 static inline void rtl_sext(rtlreg_t* dest, const rtlreg_t* src1, int width) {
   // dest <- signext(src1[(width * 8 - 1) .. 0])
+  // TODO();
   int shift_bit = (4 - width) << 3;
   *dest = (int32_t)(*src1 << shift_bit) >> shift_bit;
 }
@@ -163,6 +165,7 @@ static inline void rtl_sext(rtlreg_t* dest, const rtlreg_t* src1, int width) {
 static inline void rtl_push(const rtlreg_t* src1) {
   // esp <- esp - 4
   // M[esp] <- src1
+  // TODO();
   cpu.esp -= 4;
   vaddr_write(cpu.esp, *src1, 4);
 }
@@ -170,6 +173,7 @@ static inline void rtl_push(const rtlreg_t* src1) {
 static inline void rtl_pop(rtlreg_t* dest) {
   // dest <- M[esp]
   // esp <- esp + 4
+  // TODO();
   *dest = vaddr_read(cpu.esp, 4);
   cpu.esp += 4;
 }
@@ -182,6 +186,7 @@ static inline void rtl_setrelopi(uint32_t relop, rtlreg_t *dest,
 
 static inline void rtl_msb(rtlreg_t* dest, const rtlreg_t* src1, int width) {
   // dest <- src1[width * 8 - 1]
+  // TODO();
   *dest = (*src1 >> ((width << 3) - 1)) & 0x1;
 }
 
@@ -200,11 +205,13 @@ make_rtl_setget_eflags(SF)
 
 static inline void rtl_update_ZF(const rtlreg_t* result, int width) {
   // eflags.ZF <- is_zero(result[width * 8 - 1 .. 0])
+  // TODO();
   cpu.eflags.ZF = (*result & (~0u >> ((4 - width) << 3))) == 0;
 }
 
 static inline void rtl_update_SF(const rtlreg_t* result, int width) {
   // eflags.SF <- is_sign(result[width * 8 - 1 .. 0])
+  // TODO();
   cpu.eflags.SF = (*result >> ((width << 3) - 1)) & 1;
 }
 
