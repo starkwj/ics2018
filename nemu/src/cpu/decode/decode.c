@@ -4,7 +4,7 @@
 /* shared by all helper functions */
 DecodeInfo decoding;
 rtlreg_t t0, t1, t2, t3, at;
-const rtlreg_t tzero = 0;
+const rtlreg_t tzero = 0; // added for zero reg
 
 void decoding_set_jmp(bool is_jmp) {
   decoding.is_jmp = is_jmp;

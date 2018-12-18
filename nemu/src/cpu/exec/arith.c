@@ -1,6 +1,7 @@
 #include "cpu/exec.h"
 
 make_EHelper(add) {
+  // TODO();
   rtl_add(&t1, &id_dest->val, &id_src->val);
   operand_write(id_dest, &t1);
 
@@ -20,6 +21,7 @@ make_EHelper(add) {
 }
 
 make_EHelper(sub) {
+  // TODO();
   rtl_sub(&t1, &id_dest->val, &id_src->val);
   operand_write(id_dest, &t1);
 
