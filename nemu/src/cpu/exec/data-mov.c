@@ -45,10 +45,16 @@ make_EHelper(leave) {
 
 make_EHelper(cltd) {
   if (decoding.is_operand_size_16) {
-    TODO();
+    // TODO();
+    rtl_msb(&t0, &reg_l(R_AX), 2);
+    t0 = -t0 & 0xff;
+    rtl_sr(R_DX, &t0, 2);
   }
   else {
-    TODO();
+    // TODO();
+    rtl_msb(&t0, &reg_l(R_EAX), 4);
+    t0 = - t0;
+    rtl_sr(R_EDX, &t0, 4);
   }
 
   print_asm(decoding.is_operand_size_16 ? "cwtl" : "cltd");
