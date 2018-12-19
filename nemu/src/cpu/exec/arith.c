@@ -99,7 +99,17 @@ make_EHelper(dec) {
 }
 
 make_EHelper(neg) {
-  TODO();
+  // TODO();
+  uint32_t mask = ~0u >> ((4 - id_dest->width) << 3);
+  t0 = (id_dest->val & mask) != 0;
+  rtl_set_CF(&t0);
+  t0 = (0x1 << ((id_dest->width << 3) - 1)) == (id_dest->val & mask);
+  rtl_set_OF(&t0);
+
+  t0 = -id_dest->val;
+  operand_write(id_dest, &t0);
+
+  rtl_update_ZFSF(&t0, id_dest->width);
 
   print_asm_template1(neg);
 }
