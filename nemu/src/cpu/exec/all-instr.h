@@ -49,3 +49,5 @@ make_EHelper(idiv);
 make_EHelper(cltd);
 make_EHelper(jmp);
 make_EHelper(movsx);
+make_EHelper(jmp_rm);
+make_EHelper(call_rm);
