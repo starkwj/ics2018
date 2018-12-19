@@ -71,5 +71,16 @@ void difftest_step(uint32_t eip) {
 
   // TODO: Check the registers state with the reference design.
   // Set `nemu_state` to `NEMU_ABORT` if they are not the same.
-  TODO();
+  // TODO();
+  int i;
+  for (i = 0; i < 8; i++) {
+    if (ref_r.gpr[i]._32 != cpu.gpr[i]._32) {
+      printf("Difference at $%s: ref: %x dul: %x\n", reg_name(i, 4), ref_r.gpr[i]._32, cpu.gpr[i]._32);
+      nemu_state = NEMU_ABORT;
+    }
+  }
+  if (ref_r.eip != cpu.eip) {
+    printf("Difference at $eip: ref: %x dul: %x\n", ref_r.eip, cpu.eip);
+    nemu_state = NEMU_ABORT;
+  }
 }
