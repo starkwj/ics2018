@@ -75,7 +75,7 @@ void difftest_step(uint32_t eip) {
   int i;
   for (i = 0; i < 8; i++) {
     if (ref_r.gpr[i]._32 != cpu.gpr[i]._32) {
-      printf("Difference at $%s: ref: %x dul: %x\n", reg_name(i, 4), ref_r.gpr[i]._32, cpu.gpr[i]._32);
+      printf("Difference at $%s: ref: %x dul: %x\n", reg_name(i, 4), ref_r.gpr[7 - i]._32, cpu.gpr[i]._32);
       nemu_state = NEMU_ABORT;
     }
   }
