@@ -48,3 +48,4 @@ make_EHelper(div);
 make_EHelper(idiv);
 make_EHelper(cltd);
 make_EHelper(jmp);
+make_EHelper(movsx);
