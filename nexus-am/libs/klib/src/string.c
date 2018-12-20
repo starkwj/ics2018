@@ -82,10 +82,16 @@ void* memset(void* v,int c,size_t n) {
 
 void* memcpy(void* out, const void* in, size_t n) {
   assert(out != NULL && in != NULL);
-  unsigned char *pout = out;
-  const unsigned char *pin = in;
-  while (n--) {
+  uint32_t *pout = out;
+  const uint32_t *pin = in;
+  while (n >= 4) {
     *pout++ = *pin++;
+    n -= 4;
+  }
+  uint8_t *pout2 = (uint8_t *)pout;
+  const uint8_t *pin2 = (uint8_t *)pin;
+  while (n--) {
+    *pout2++ = *pin2++;
   }
   return out;
 }
