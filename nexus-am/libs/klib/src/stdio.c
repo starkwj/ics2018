@@ -32,6 +32,16 @@ char * num2a(char *str, int num, int base, int width, int precision, int flag) {
 
 
 int printf(const char *fmt, ...) {
+  char tmp[256];
+  va_list ap;
+  int i;
+  va_start(ap, fmt);
+  i = vsprintf(tmp, fmt, ap);
+  va_end(ap);
+  int j;
+  for (j = 0; j < i; j++) {
+    _putc(tmp[i]);
+  }
   return 0;
 }
 
