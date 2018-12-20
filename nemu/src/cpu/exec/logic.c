@@ -57,6 +57,26 @@ make_EHelper(sar) {
   print_asm_template2(sar);
 }
 
+make_EHelper(rol) {
+  t0 = id_dest->val;
+  t1 = id_src->val;
+  if (t1 != 0) {
+    if (decoding.is_operand_size_16) {
+      t1 = t1 % 16;
+      t0 = ((t0 << t1) | (t0 >> (16 - t1))) & 0xffff;
+    }
+    else {
+      t1 = t1 % 32;
+      t0 = ((t0 << t1) | (t0 >> (32 - t1)));
+    }
+    operand_write(id_dest, &t0);
+    t0 &= 0x1;
+    rtl_set_CF(&t0);
+  }
+
+  print_asm_template2(rol);
+}
+
 make_EHelper(shl) {
   // TODO();
   rtl_shl(&t0, &id_dest->val, &id_src->val);
