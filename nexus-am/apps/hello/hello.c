@@ -8,7 +8,8 @@ void print(const char *s) {
 int main() {
   for (int i = 0; i < 10; i ++) {
     // print("Hello World!\n");
-    printf("Hello World!\n");
+    // printf("Hello World!\n");
+    printf("%s %d\n", "Hello World!", 1234);
   }
   return 0;
 }
