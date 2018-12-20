@@ -40,7 +40,6 @@ int printf(const char *fmt, ...) {
   va_end(ap);
   int j;
   for (j = 0; j < i; j++) {
-    _putc('-');
     _putc(tmp[j]);
   }
   return 0;
