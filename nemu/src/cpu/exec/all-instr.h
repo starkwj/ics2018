@@ -28,10 +28,10 @@ make_EHelper(jcc);
 make_EHelper(test);
 make_EHelper(leave);
 
-// make_EHelper(rol);
-// make_EHelper(ror);
-// make_EHelper(rcl);
-// make_EHelper(rcr);
+make_EHelper(rol);
+make_EHelper(ror);
+make_EHelper(rcl);
+make_EHelper(rcr);
 make_EHelper(shl);
 make_EHelper(shr);
 make_EHelper(sar);
