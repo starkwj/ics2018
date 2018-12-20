@@ -59,6 +59,7 @@ char * num2a(char *str, int num, int base, int width, int flags) {
     tmp[i++] = digits[lower][num % base];
     num /= base;
   }
+  width -= i;
 
   // if not left, paddings are printed
   if (!(flags & LEFT)) {
@@ -187,6 +188,7 @@ repeat:
         while (len--) {
           *str++ = *s++;
         }
+
         break;
       }
       
