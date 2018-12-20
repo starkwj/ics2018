@@ -194,10 +194,19 @@ repeat:
       case 's': {
         char *s = va_arg(ap, char *);
         int len = strlen(s);
-        // left
+        field_width -= len;
+        if (!(flags & LEFT)) {
+          while (field_width-- > 0) {
+            *str++ = ' ';
+          }
+        }
         while (len--) {
           *str++ = *s++;
         }
+        while (field_width-- > 0) {
+          *str++ = ' ';
+        }
+        
 
         break;
       }
