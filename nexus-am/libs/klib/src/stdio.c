@@ -6,6 +6,8 @@
 #define LOWER     0x1
 #define LEFT      0x2
 #define ZEROPAD   0x4
+#define SPACE     0x8
+#define SIGN      0x10
 
 
 static inline int isdigit(int ch) {
@@ -21,11 +23,28 @@ int getNum(const char **fmt) {
   return n;
 }
 
-char * num2a(char *str, int num, int base, int width, int precision, int flags) {
+char * num2a(char *str, int num, int base, int width, int flags) {
   static const char digits[2][16] = {"0123456789ABCDEF", "0123456789abcdef"};
-  char tmp[100];
+  char tmp[60];
   int lower = flags & LOWER;
-  char padding = '#';
+
+  char sign = 0;
+  if (base == 10) {
+    if (num < 0) {
+      sign = '-';
+      width--;
+    } else if (flags & SIGN) {
+      sign = '+';
+      width--;
+    } else if (flags & SPACE) {
+      sign = ' ';
+      width--;
+    }
+  } else if (base == 16) {
+    width -= 2;
+  }
+
+  char padding = ' ';
   if (flags & ZEROPAD) {
     padding = '0';
   }
@@ -35,27 +54,31 @@ char * num2a(char *str, int num, int base, int width, int precision, int flags) 
     tmp[i++] = '0';
   }
 
-  if (precision < i) {
-    precision = i;
+  // convert num from int to string
+  while (num) {
+    tmp[i++] = digits[lower][num % base];
+    num /= base;
   }
-  width -= precision;
 
+  // if not left, paddings are printed
   if (!(flags & LEFT)) {
     while (width-- > 0) {
       *str++ = padding;
     }
   }
 
-  while (num) {
-    tmp[i++] = digits[lower][num % base];
-    num /= base;
+  if (sign != 0) {
+    *str++ = sign;
   }
-
-
+  if (base == 16) {
+    *str++ = '0';
+    *str++ = lower ? 'x' : 'X'; 
+  }
   while (i--) {
     *str++ = tmp[i];
   }
 
+  // right padding
   while (width-- > 0) {
     *str++ = ' ';
   }
@@ -82,7 +105,6 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   char *str = out;
   int flags;
   int field_width;
-  int precision;
   // int length_modifier;
   // int conversion_specifiers;
 
@@ -101,6 +123,15 @@ repeat:
       case '0':
         flags |= ZEROPAD;
         goto repeat;
+      case '-':
+        flags |= LEFT;
+        goto repeat;
+      case ' ':
+        flags |= SPACE;
+        goto repeat;
+      case '+':
+        flags |= SIGN;
+        goto repeat;
 
       default:
         break;
@@ -111,9 +142,6 @@ repeat:
     if (isdigit(*fmt)) {
       field_width = getNum(&fmt);
     }
-
-    precision = -1;
-    // precision
 
     // length_modifier = -1;
 
@@ -155,9 +183,6 @@ repeat:
       case 's': {
         char *s = va_arg(ap, char *);
         int len = strlen(s);
-        if (precision > 0) {
-          len = precision < len ? precision : len;
-        }
         // left
         while (len--) {
           *str++ = *s++;
@@ -176,7 +201,7 @@ repeat:
 
     if (isnum) {
       int num = va_arg(ap, int);
-      str = num2a(str, num, base, field_width, precision, flags);
+      str = num2a(str, num, base, field_width, flags);
     }
   }
 
