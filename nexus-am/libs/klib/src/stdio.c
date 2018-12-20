@@ -3,28 +3,61 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-#define LOWER 0x1
+#define LOWER     0x1
+#define LEFT      0x2
+#define ZEROPAD   0x4
+
 
 static inline int isdigit(int ch) {
   return (ch >= '0') && (ch <= '9');
 }
 
-char * num2a(char *str, int num, int base, int width, int precision, int flag) {
+int getNum(const char **fmt) {
+  int n = 0;
+  while (isdigit(**fmt)) {
+    n = n * 10 + **fmt - '0';
+    (*fmt)++;
+  }
+  return n;
+}
+
+char * num2a(char *str, int num, int base, int width, int precision, int flags) {
   static const char digits[2][16] = {"0123456789ABCDEF", "0123456789abcdef"};
   char tmp[100];
-  int lower = flag & LOWER;
+  int lower = flags & LOWER;
+  char padding = '#';
+  if (flags & ZEROPAD) {
+    padding = '0';
+  }
 
   int i = 0;
   if (num == 0) {
     tmp[i++] = '0';
   }
+
+  if (precision < i) {
+    precision = i;
+  }
+  width -= precision;
+
+  if (!(flags & LEFT)) {
+    while (width--) {
+      *str++ = padding;
+    }
+  }
+
   while (num) {
     tmp[i++] = digits[lower][num % base];
     num /= base;
   }
 
+
   while (i--) {
     *str++ = tmp[i];
+  }
+
+  while (width--) {
+    *str++ = ' ';
   }
 
   return str;
@@ -66,14 +99,18 @@ repeat:
     // flags
     switch (*fmt) {
       case '0':
+        flags |= ZEROPAD;
         goto repeat;
 
       default:
         break;
     }
 
-    field_width = -1;
     // width
+    field_width = -1;
+    if (isdigit(*fmt)) {
+      field_width = getNum(&fmt);
+    }
 
     precision = -1;
     // precision
