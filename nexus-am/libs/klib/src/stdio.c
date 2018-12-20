@@ -44,9 +44,8 @@ char * num2a(char *str, int num, int base, int width, int flags) {
     width -= 2;
   }
 
-  char padding = ' ';
-  if (flags & ZEROPAD) {
-    padding = '0';
+  if (flags & LEFT) {
+    flags = flags & (~ZEROPAD);
   }
 
   int i = 0;
@@ -63,21 +62,28 @@ char * num2a(char *str, int num, int base, int width, int flags) {
   }
   width -= i;
 
+  // if not left and not zero-padding, spaces are padded
+  if (!(flags & (LEFT | ZEROPAD))) {
+    while (width-- > 0) {
+      *str++ = ' ';
+    }
+  }
+  // sign if
   if (sign != 0) {
     *str++ = sign;
   }
+  // if base == 16, 0[xX] is printed
   if (base == 16) {
     *str++ = '0';
     *str++ = lower ? 'x' : 'X'; 
   }
-  
-  // if not left, paddings are printed
-  if (!(flags & LEFT)) {
+  // if zeropad, '0' is padded
+  if (flags & ZEROPAD) {
     while (width-- > 0) {
-      *str++ = padding;
+      *str++ = '0';
     }
   }
-
+  
   while (i--) {
     *str++ = tmp[i];
   }
