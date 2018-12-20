@@ -175,6 +175,7 @@ repeat:
       case 'x':
         flags |= LOWER;
       case 'X':
+        isnum = 1;
         base = 16;
         break;
       
