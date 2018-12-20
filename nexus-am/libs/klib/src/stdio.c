@@ -42,6 +42,7 @@ int printf(const char *fmt, ...) {
   _putc(i + '0');
   _putc('\n');
   for (j = 0; j < i; j++) {
+    _putc('-');
     _putc(tmp[i]);
   }
   return 0;
