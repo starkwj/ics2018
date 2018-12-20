@@ -1,7 +1,6 @@
 #include <am.h>
 #include <x86.h>
 #include <amdev.h>
-#include <klib.h>
 
 #define I8042_DATA_PORT 0x60
 #define KEYDOWN_MASK 0x8000
