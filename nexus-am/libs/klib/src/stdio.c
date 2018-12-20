@@ -41,7 +41,7 @@ char * num2a(char *str, int num, int base, int width, int precision, int flags) 
   width -= precision;
 
   if (!(flags & LEFT)) {
-    while (width--) {
+    while (width-- > 0) {
       *str++ = padding;
     }
   }
@@ -56,7 +56,7 @@ char * num2a(char *str, int num, int base, int width, int precision, int flags) 
     *str++ = tmp[i];
   }
 
-  while (width--) {
+  while (width-- > 0) {
     *str++ = ' ';
   }
 
