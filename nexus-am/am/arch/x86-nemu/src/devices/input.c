@@ -11,7 +11,6 @@ size_t input_read(uintptr_t reg, void *buf, size_t size) {
     case _DEVREG_INPUT_KBD: {
       _KbdReg *kbd = (_KbdReg *)buf;
       uint32_t k = inl(I8042_DATA_PORT);
-      // printf("test:%d\n", k);
       kbd->keydown = (k & KEYDOWN_MASK ? 1 : 0);
       kbd->keycode = k & ~KEYDOWN_MASK;
       return sizeof(_KbdReg);
