@@ -39,6 +39,8 @@ int printf(const char *fmt, ...) {
   i = vsprintf(tmp, fmt, ap);
   va_end(ap);
   int j;
+  _putc(i + '0');
+  _putc('\n');
   for (j = 0; j < i; j++) {
     _putc(tmp[i]);
   }

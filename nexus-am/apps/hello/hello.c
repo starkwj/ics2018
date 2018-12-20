@@ -7,7 +7,6 @@ void print(const char *s) {
 }
 int main() {
   for (int i = 0; i < 10; i ++) {
-    _putc('t');
     printf("Hello World!\n");
   }
   return 0;
