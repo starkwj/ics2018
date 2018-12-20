@@ -55,18 +55,13 @@ char * num2a(char *str, int num, int base, int width, int flags) {
   }
 
   // convert num from int to string
+  if (num < 0)
+    num = -num;
   while (num) {
     tmp[i++] = digits[lower][num % base];
     num /= base;
   }
   width -= i;
-
-  // if not left, paddings are printed
-  if (!(flags & LEFT)) {
-    while (width-- > 0) {
-      *str++ = padding;
-    }
-  }
 
   if (sign != 0) {
     *str++ = sign;
@@ -75,6 +70,14 @@ char * num2a(char *str, int num, int base, int width, int flags) {
     *str++ = '0';
     *str++ = lower ? 'x' : 'X'; 
   }
+  
+  // if not left, paddings are printed
+  if (!(flags & LEFT)) {
+    while (width-- > 0) {
+      *str++ = padding;
+    }
+  }
+
   while (i--) {
     *str++ = tmp[i];
   }
