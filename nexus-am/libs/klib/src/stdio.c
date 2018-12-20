@@ -16,7 +16,7 @@ char * num2a(char *str, int num, int base, int width, int precision, int flag) {
 
   int i = 0;
   if (num == 0) {
-    tmp[i++] = 0;
+    tmp[i++] = '0';
   }
   while (num) {
     tmp[i++] = digits[lower][num % base];
