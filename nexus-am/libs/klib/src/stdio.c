@@ -110,6 +110,7 @@ repeat:
     field_width = -1;
     if (isdigit(*fmt)) {
       field_width = getNum(&fmt);
+      _putc('x');_putc(field_width + '0');
     }
 
     precision = -1;
