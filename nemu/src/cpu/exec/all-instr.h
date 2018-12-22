@@ -56,3 +56,5 @@ make_EHelper(call_rm);
 
 make_EHelper(in);
 make_EHelper(out);
+
+make_EHelper(lidt);
