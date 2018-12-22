@@ -23,7 +23,7 @@ int getNum(const char **fmt) {
   return n;
 }
 
-char * num2a(char *str, int num, int base, int width, int flags) {
+char * num2a(char *str, int64_t num, int base, int width, int flags) {
   static const char digits[2][16] = {"0123456789ABCDEF", "0123456789abcdef"};
   char tmp[60];
   int lower = flags & LOWER;
@@ -166,12 +166,12 @@ repeat:
         base = 10;
         break;
 
-      case 'o':
-        break;
+      // case 'o':
+      //   break;
 
-      case 'u':
-        break;
-
+      // case 'u':
+      //   break;
+      case 'p':
       case 'x':
         flags |= LOWER;
       case 'X':
@@ -179,13 +179,13 @@ repeat:
         base = 16;
         break;
       
-      case 'e':
-      case 'E':
-        break;
+      // case 'e':
+      // case 'E':
+      //   break;
       
-      case 'g':
-      case 'G':
-        break;
+      // case 'g':
+      // case 'G':
+      //   break;
       
       case 'c':
         *str++ = (unsigned char)va_arg(ap, int);
@@ -210,12 +210,14 @@ repeat:
 
         break;
       }
-      
-      case 'p':
-        break;
 
       case '%':
         *str++ = '%';
+        break;
+
+      default:
+        *str++ = '%';
+        *str++ = *fmt;
         break;
 
     } // end of switch
