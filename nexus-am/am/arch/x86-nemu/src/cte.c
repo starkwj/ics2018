@@ -8,10 +8,9 @@ void vecnull();
 
 _Context* irq_handle(_Context *tf) {
   _Context *next = tf;
-  printf("eax: %x ecx: %x esi:%x edi:%x\n", tf->eax, tf->ecx, tf->esi, tf->edi);
-  printf("irq: %x\n", tf->irq);
-  printf("eip: %x cs: %x eflags:%x\n", tf->eip, tf->cs, tf->eflags);
-
+  // printf("eax: %x ecx: %x esi:%x edi:%x\n", tf->eax, tf->ecx, tf->esi, tf->edi);
+  // printf("irq: %x\n", tf->irq);
+  // printf("eip: %x cs: %x eflags:%x\n", tf->eip, tf->cs, tf->eflags);
   if (user_handler) {
     _Event ev = {0};
     switch (tf->irq) {
