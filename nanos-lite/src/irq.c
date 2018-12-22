@@ -9,14 +9,17 @@
 //   _EVENT_YIELD,
 //   _EVENT_SYSCALL,
 // };
+extern _Context* do_syscall(_Context *c);
 
 static _Context* do_event(_Event e, _Context* c) {
+  _Context *r = NULL;
   switch (e.event) {
+    case _EVENT_SYSCALL: r = do_syscall(c); break;
     case _EVENT_YIELD: printf("Event Yield ID = %d\n", e.event); break;
     default: panic("Unhandled event ID = %d", e.event);
   }
 
-  return NULL;
+  return r;
 }
 
 void init_irq(void) {
