@@ -8,7 +8,7 @@ long sys_write(int fd, const void *buf, size_t count) {
   int i = 0;
   if (fd == 1 || fd == 2) {
     for (; i < count; i++) {
-      _putc(*(const char *)buf);
+      _putc(*((const char *)buf + i));
     }
   }
   return i;
