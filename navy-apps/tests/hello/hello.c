@@ -3,7 +3,7 @@
 
 int main() {
   char str[100];
-  sprintf(str, "test %x %x\n", 123, 255);
+  sprintf(str, "test %d\n", 123);
   write(1, str, 100);
   write(1, "Hello World!\n", 13);
   int i = 2;
