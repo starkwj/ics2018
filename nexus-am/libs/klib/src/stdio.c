@@ -117,7 +117,6 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   int field_width;
   // int length_modifier;
   // int conversion_specifiers;
-  *str++ = '!';
 
   for (; *fmt; ++fmt) {
     if (*fmt != '%') {
