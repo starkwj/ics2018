@@ -51,7 +51,6 @@ int fs_open(const char *pathname, int flags, int mode) {
   for (i = 0; i < NR_FILES; i++) {
     if (!strcmp(pathname, file_table[i].name)) {
       file_table[i].open_offset = 0;
-      printf("open %s, fd = %d\n", pathname, i);
       return i;
     }
   }
@@ -62,7 +61,6 @@ int fs_open(const char *pathname, int flags, int mode) {
 ssize_t fs_read(int fd, void *buf, size_t len) {
   size_t sz = fs_filesz(fd);
   off_t curp = file_table[fd].disk_offset + file_table[fd].open_offset;
-  printf("read fd=%d  curp=%d  len=%d\n", fd, curp, len);
   if (fd < 3) {
     return 0;
   }
@@ -79,7 +77,6 @@ ssize_t fs_read(int fd, void *buf, size_t len) {
 ssize_t fs_write(int fd, const void *buf, size_t len) {
   size_t sz = fs_filesz(fd);
   off_t curp = file_table[fd].disk_offset + file_table[fd].open_offset;
-  printf("write fd=%d  curp=%d  len=%d\n", fd, curp, len);
   if (curp + len > file_table[fd].disk_offset + sz) {
     len = file_table[fd].disk_offset + sz - curp;
   }
@@ -107,7 +104,6 @@ off_t fs_lseek(int fd, off_t offset, int whence) {
       panic("should not reach here");
       break;
   }
-  printf("fd=%d lseek=%d filesz=%d\n", fd, new, file_table[fd].size);
   assert(new >= 0 && new <= file_table[fd].size);
   file_table[fd].open_offset = new;
   return new;
