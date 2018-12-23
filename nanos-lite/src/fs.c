@@ -107,6 +107,7 @@ off_t fs_lseek(int fd, off_t offset, int whence) {
       panic("should not reach here");
       break;
   }
+  printf("lseek=%d filesz=%d\n", new, file_table[fd].size);
   assert(new >= 0 && new <= file_table[fd].size);
   file_table[fd].open_offset = new;
   return new;
