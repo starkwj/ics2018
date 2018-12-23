@@ -2,6 +2,9 @@
 
 extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
 extern size_t ramdisk_write(const void *buf, size_t offset, size_t len);
+extern size_t serial_write(const void *buf, size_t offset, size_t len);
+extern size_t dispinfo_read(void *buf, size_t offset, size_t len);
+extern size_t fb_write(const void *buf, size_t offset, size_t len);
 
 typedef size_t (*ReadFn) (void *buf, size_t offset, size_t len);
 typedef size_t (*WriteFn) (const void *buf, size_t offset, size_t len);
@@ -30,8 +33,10 @@ size_t invalid_write(const void *buf, size_t offset, size_t len) {
 /* This is the information about all files in disk. */
 static Finfo file_table[] __attribute__((used)) = {
   {"stdin", 0, 0, 0, invalid_read, invalid_write},
-  {"stdout", 0, 0, 0, invalid_read, invalid_write},
-  {"stderr", 0, 0, 0, invalid_read, invalid_write},
+  {"stdout", 0, 0, 0, invalid_read, serial_write},
+  {"stderr", 0, 0, 0, invalid_read, serial_write},
+  {"/dev/fb", 0, 0, 0, invalid_read, fb_write},
+  {"/proc/dispinfo", 0, 0, 0, dispinfo_read, invalid_write},
 #include "files.h"
 };
 
@@ -39,6 +44,7 @@ static Finfo file_table[] __attribute__((used)) = {
 
 void init_fs() {
   // TODO: initialize the size of /dev/fb
+  file_table[3].size = screen_width() * screen_height() * sizeof(int);
 }
 
 size_t fs_filesz(int fd) {
@@ -75,16 +81,21 @@ ssize_t fs_read(int fd, void *buf, size_t len) {
 }
 
 ssize_t fs_write(int fd, const void *buf, size_t len) {
-  size_t sz = fs_filesz(fd);
   off_t curp = file_table[fd].disk_offset + file_table[fd].open_offset;
-  if (curp + len > file_table[fd].disk_offset + sz) {
-    len = file_table[fd].disk_offset + sz - curp;
+  size_t sz = fs_filesz(fd);
+  if (file_table[fd].write != NULL) {
+    return file_table[fd].write(buf, curp, len);
   }
-  if (len > 0) {
-    ramdisk_write(buf, curp, len);
-    file_table[fd].open_offset += len;
+  else {
+    if (curp + len > file_table[fd].disk_offset + sz) {
+      len = file_table[fd].disk_offset + sz - curp;
+    }
+    if (len > 0) {
+      ramdisk_write(buf, curp, len);
+      file_table[fd].open_offset += len;
+    }
+    return len;
   }
-  return len;
 }
 
 off_t fs_lseek(int fd, off_t offset, int whence) {
