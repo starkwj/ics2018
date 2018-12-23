@@ -51,7 +51,7 @@ int fs_open(const char *pathname, int flags, int mode) {
   for (i = 0; i < NR_FILES; i++) {
     if (!strcmp(pathname, file_table[i].name)) {
       file_table[i].open_offset = 0;
-      printf("open, fd = %d\n", i);
+      printf("open %s, fd = %d\n", pathname, i);
       return i;
     }
   }
