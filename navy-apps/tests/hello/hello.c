@@ -2,6 +2,8 @@
 #include <stdio.h>
 
 int main() {
+  char str[100];
+  sprintf(str, "test %d %x\n", 123, 255);
   write(1, "Hello World!\n", 13);
   int i = 2;
   volatile int j = 0;
