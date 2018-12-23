@@ -43,7 +43,7 @@ void *_sbrk(intptr_t increment){
   intptr_t old = program_break;
   intptr_t new = program_break + increment;
   char str[40];
-  sprintf(str, "old=%x, inc=%x, new=%x\n", old, increment, new);
+  sprintf(str, "old=%u, inc=%x, new=%x\n", old, increment, new);
   _write(1, str, strlen(str));
   if (_syscall_(SYS_brk, new, 0, 0) == 0) {
     program_break = new;
