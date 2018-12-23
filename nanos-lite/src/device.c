@@ -32,6 +32,7 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
     len = 128 - offset;
   }
   memcpy(buf, dispinfo + offset, len);
+  printf("buf:\n%s\n", buf);
   return len;
 }
 
@@ -65,5 +66,4 @@ void init_device() {
   // TODO: print the string to array `dispinfo` with the format
   // described in the Navy-apps convention
   sprintf(dispinfo, "WIDTH:%d\nHEIGHT:%d\n", screen_width(), screen_height());
-  printf(dispinfo);
 }
