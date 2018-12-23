@@ -42,9 +42,6 @@ static intptr_t program_break = (intptr_t)&_end;
 void *_sbrk(intptr_t increment){
   intptr_t old = program_break;
   intptr_t new = program_break + increment;
-  char str[80];
-  sprintf(str, "%d  old=%d, inc=%d, new=%d\n", 123, old, increment, new);
-  _write(1, str, strlen(str));
   if (_syscall_(SYS_brk, new, 0, 0) == 0) {
     program_break = new;
     return (void *)old;
