@@ -11,7 +11,6 @@ long sys_write(int fd, const void *buf, size_t count) {
       _putc(*((const char *)buf + i));
     }
   }
-  Log("my test");
   return i;
 }
 
@@ -34,10 +33,10 @@ _Context* do_syscall(_Context *c) {
     case SYS_write:
       c->GPRx = sys_write(a[1], (const void *)a[2], a[3]);
       break;
-    // case SYS_brk:
+    case SYS_brk:
 
-    //   c->GPRx = mm_brk(a[1]);
-    //   break;
+      c->GPRx = 0;
+      break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
 
