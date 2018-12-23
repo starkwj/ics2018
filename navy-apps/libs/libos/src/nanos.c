@@ -61,6 +61,9 @@ int _close(int fd) {
 }
 
 off_t _lseek(int fd, off_t offset, int whence) {
+  char str[30];
+  sprintf("nano lseek fd=%d\n", fd);
+  _write(1, str, 25);
   _syscall_(SYS_lseek, fd, offset, whence);
   return 0;
 }

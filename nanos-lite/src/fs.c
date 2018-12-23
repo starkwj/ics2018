@@ -91,7 +91,6 @@ ssize_t fs_write(int fd, const void *buf, size_t len) {
 }
 
 off_t fs_lseek(int fd, off_t offset, int whence) {
-  printf("test\n");
   assert(fd < NR_FILES);
   off_t new = -1;
   switch (whence) {
