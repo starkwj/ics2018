@@ -32,7 +32,6 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
     len = 128 - offset;
   }
   memcpy(buf, dispinfo + offset, len);
-  printf("buf:\n%s\n", buf);
   return len;
 }
 
