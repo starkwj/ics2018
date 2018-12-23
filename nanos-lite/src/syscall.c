@@ -1,5 +1,6 @@
 #include "common.h"
 #include "syscall.h"
+#include "fs.h"
 
 long sys_write(int fd, const void *buf, size_t count) {
   if (buf == NULL) {
@@ -10,6 +11,9 @@ long sys_write(int fd, const void *buf, size_t count) {
     for (; i < count; i++) {
       _putc(*((const char *)buf + i));
     }
+  }
+  else {
+    i = fs_write(fd, buf, count);
   }
   return i;
 }
@@ -31,11 +35,18 @@ _Context* do_syscall(_Context *c) {
       c->GPRx = 0;
       break;
     case SYS_open:
+      c->GPRx = fs_open((const char *)a[1], a[2], a[3]);
       break;
     case SYS_read:
+      c->GPRx = fs_read(a[1], (void *)a[2], a[3]);
       break;
     case SYS_write:
       c->GPRx = sys_write(a[1], (const void *)a[2], a[3]);
+      break;
+    case SYS_close:
+      c->GPRx = fs_close(a[1]);
+    case SYS_lseek:
+      c->GPRx = fs_lseek(a[1], a[2], a[3]);
       break;
     case SYS_brk:
       c->GPRx = 0;
