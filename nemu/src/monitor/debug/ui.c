@@ -160,8 +160,9 @@ static int cmd_save(char *args) {
   }
   if (fwrite(&cpu, sizeof(cpu), 1, f) != 1)
     printf("save regs failed.\n");
-  if (fwrite(guest_to_host(0), 1, PMEM_SIZE + ENTRY_START, f) != PMEM_SIZE + ENTRY_START)
-    printf("save mem failed.\n");
+  int res = 0;
+  if ((res = fwrite(guest_to_host(0), 1, PMEM_SIZE + ENTRY_START, f)) != PMEM_SIZE + ENTRY_START)
+    printf("save mem failed. %d bytes\n", res);
   fclose(f);
   return 0;
 }
