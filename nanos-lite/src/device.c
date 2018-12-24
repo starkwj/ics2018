@@ -45,12 +45,12 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
 size_t fb_write(const void *buf, size_t offset, size_t len) {
   offset >>= 2;
   len >>= 2;
-  int rsz = 0;
+  // int rsz = 0;
   int sw = screen_width();
   // int sh = screen_height();
   int x = offset % sw;
   int y = offset / sw;
-  int draw = len;
+  // int draw = len;
   // while (len > 0 && y < sh) {
   //   if (x + len > sw)
   //     draw = sw - x;
@@ -62,27 +62,30 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
   //   x = 0;
   //   y++;
   // }
-  if (x + len > sw) {
-    printf("fb_write: x=%d len=%d sw=%d\n", x, len, sw);
-    draw = sw - x;
-  }
-  draw_rect((uint32_t *)(buf + rsz), x, y, draw, 1);
-  rsz += draw << 2;
-  len -= draw;
-  y++;
-  if (len > sw) {
-    int h = len / sw;
-    draw_rect((uint32_t *)(buf + rsz), 0, y, sw, h);
-    rsz += (sw * h) << 2;
-    len -= sw * h;
-    y += h;
-  }
-  if (len > 0) {
-    draw_rect((uint32_t *)(buf + rsz), 0, y, len, 1);
-    rsz += len << 2;
-  }
 
-  return rsz;
+  // if (x + len > sw) {
+  //   printf("fb_write: x=%d len=%d sw=%d\n", x, len, sw);
+  //   draw = sw - x;
+  // }
+  // draw_rect((uint32_t *)(buf + rsz), x, y, draw, 1);
+  // rsz += draw << 2;
+  // len -= draw;
+  // y++;
+  // if (len > sw) {
+  //   int h = len / sw;
+  //   draw_rect((uint32_t *)(buf + rsz), 0, y, sw, h);
+  //   rsz += (sw * h) << 2;
+  //   len -= sw * h;
+  //   y += h;
+  // }
+  // if (len > 0) {
+  //   draw_rect((uint32_t *)(buf + rsz), 0, y, len, 1);
+  //   rsz += len << 2;
+  // }
+  // return rsz;
+
+  draw_rect((uint32_t *)buf, x, y, len, 1);
+  return len << 2;
 }
 
 void init_device() {
