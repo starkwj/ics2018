@@ -171,7 +171,7 @@ static int cmd_load(char *args) {
     printf("Can't open file '%s'.\n", args);
     return -1;
   }
-  if (fread(&cpu, sizeof(cpu), 1, f) != sizeof(cpu))
+  if (fread(&cpu, sizeof(cpu), 1, f) != 1)
     printf("load failed.\n");
   fclose(f);
   return 0;
