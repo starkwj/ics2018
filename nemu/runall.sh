@@ -26,7 +26,7 @@ for file in $files; do
   printf "[%14s] " $base
   logfile=$base-log.txt
   # $nemu -b -l $ori_log $file &> $logfile
- $nemu -l $ori_log $file -d $NEMU_HOME/tools/qemu-diff/build/qemu-so &> $logfile
+ $nemu -b -l $ori_log $file -d $NEMU_HOME/tools/qemu-diff/build/qemu-so &> $logfile
 
   if (grep 'nemu: HIT GOOD TRAP' $logfile > /dev/null) then
     echo -e "\033[1;32mPASS!\033[0m"
