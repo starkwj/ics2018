@@ -158,8 +158,10 @@ static int cmd_save(char *args) {
     printf("Can't open file '%s'.\n", args);
     return -1;
   }
-  if (fwrite(&cpu, sizeof(cpu), 1, f) != sizeof(cpu))
-    printf("save failed.\n");
+  int res = 0;
+  if ((res = fwrite(&cpu, sizeof(cpu), 1, f)) != sizeof(cpu)) {
+    printf("save failed. %d bytes writed\n", res);
+  }
   fclose(f);
   return 0;
 }
