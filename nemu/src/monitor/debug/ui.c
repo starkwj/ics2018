@@ -156,7 +156,7 @@ static int cmd_save(char *args) {
   FILE *f = fopen(args, "wb");
   if (f == NULL) {
     printf("Can't open file '%s'.\n", args);
-    return -1;
+    return 0;
   }
   if (fwrite(&cpu, sizeof(cpu), 1, f) != 1)
     printf("save regs failed.\n");
@@ -170,7 +170,7 @@ static int cmd_load(char *args) {
   FILE *f = fopen(args, "rb");
   if (f == NULL) {
     printf("Can't open file '%s'.\n", args);
-    return -1;
+    return 0;
   }
   if (fread(&cpu, sizeof(cpu), 1, f) != 1)
     printf("load regs failed.\n");
