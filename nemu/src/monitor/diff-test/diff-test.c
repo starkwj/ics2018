@@ -101,7 +101,7 @@ void difftest_step(uint32_t eip) {
 void difftest_sync() {
   ref_difftest_memcpy_from_dut(0, guest_to_host(0), 0x7c00);
   printf("test1\n");
-  ref_difftest_memcpy_from_dut(ENTRY_START, guest_to_host(ENTRY_START), PMEM_SIZE);
+  ref_difftest_memcpy_from_dut(ENTRY_START, guest_to_host(ENTRY_START), PMEM_SIZE - ENTRY_START);
   CPU_state ref_r;
   ref_difftest_getregs(&ref_r);
   ref_r.eax = 0x7e00;
