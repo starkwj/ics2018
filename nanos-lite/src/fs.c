@@ -39,10 +39,12 @@ static Finfo file_table[] __attribute__((used)) = {
   {"/dev/fb", 0, 0, 0, invalid_read, fb_write},
   {"/proc/dispinfo", 0, 0, 0, dispinfo_read, invalid_write},
   {"/dev/events", 0, 0, 0, events_read, invalid_write},
+  {"/dev/tty", 0, 0, 0, invalid_read, serial_write},
 #include "files.h"
 };
-#define FB       3
-#define DISPINFO 4
+enum {
+  FB = 3, DISPINFO, EVENTS, TTY
+};
 
 #define NR_FILES (sizeof(file_table) / sizeof(file_table[0]))
 
