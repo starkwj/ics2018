@@ -72,11 +72,11 @@ int strncmp(const char* s1, const char* s2, size_t n) {
 }
 
 void * memset(void* v,int c,size_t n) {
-  assert(v != NULL);
-  size_t i;
-  for (i = 0; i < n; i++) {
-    *((uint8_t *)(v + i)) = c;
-  }
+  // assert(v != NULL);
+  // size_t i;
+  // for (i = 0; i < n; i++) {
+  //   *((uint8_t *)(v + i)) = c;
+  // }
   return v;
 }
 
