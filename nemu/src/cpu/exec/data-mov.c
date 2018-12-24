@@ -109,3 +109,10 @@ make_EHelper(lea) {
   operand_write(id_dest, &id_src->addr);
   print_asm_template2(lea);
 }
+
+make_EHelper(stos) {
+  operand_write(id_dest, &id_src->val);
+  t0 = reg_l(R_EDI);
+  t0 += id_src->width;
+  rtl_sr(R_EDI, &t0, id_src->width);
+}

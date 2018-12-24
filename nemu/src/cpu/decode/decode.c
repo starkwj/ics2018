@@ -327,6 +327,17 @@ make_DHelper(out_a2dx) {
 #endif
 }
 
+make_DHelper(stos) {
+  if (decoding.is_operand_size_16)
+    id_src->width = 2;
+  else
+    id_src->width = 4;
+  id_src->type = OP_TYPE_REG;
+  rtl_lr(&id_src->val, R_EAX, id_src->width);
+  id_dest->type = OP_TYPE_MEM;
+  rtl_lm(&id_dest->val, &reg_l(R_EDI), 4);
+}
+
 void operand_write(Operand *op, rtlreg_t* src) {
   if (op->type == OP_TYPE_REG) { rtl_sr(op->reg, src, op->width); }
   else if (op->type == OP_TYPE_MEM) { rtl_sm(&op->addr, src, op->width); }
