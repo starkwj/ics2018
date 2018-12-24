@@ -174,7 +174,7 @@ static int cmd_load(char *args) {
   }
   if (fread(&cpu, sizeof(cpu), 1, f) != 1)
     printf("load regs failed.\n");
-  if (fwrite(guest_to_host(0), 1, PMEM_SIZE, f) != PMEM_SIZE)
+  if (fread(guest_to_host(0), 1, PMEM_SIZE, f) != PMEM_SIZE)
     printf("load mem failed.\n");
   fclose(f);
   return 0;
