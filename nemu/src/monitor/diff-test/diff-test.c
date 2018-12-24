@@ -9,11 +9,20 @@ static void (*ref_difftest_getregs)(void *c);
 static void (*ref_difftest_setregs)(const void *c);
 static void (*ref_difftest_exec)(uint64_t n);
 
+bool detached;
 static bool is_skip_ref;
 static bool is_skip_dut;
 
-void difftest_skip_ref() { is_skip_ref = true; }
-void difftest_skip_dut() { is_skip_dut = true; }
+void difftest_skip_ref() {
+  if (detached)
+    return;
+  is_skip_ref = true;
+}
+void difftest_skip_dut() {
+  if (detached)
+    return;
+  is_skip_dut = true;
+}
 
 void init_difftest(char *ref_so_file, long img_size) {
 #ifndef DIFF_TEST
@@ -49,9 +58,13 @@ void init_difftest(char *ref_so_file, long img_size) {
   ref_difftest_init();
   ref_difftest_memcpy_from_dut(ENTRY_START, guest_to_host(ENTRY_START), img_size);
   ref_difftest_setregs(&cpu);
+  detached = false;
 }
 
 void difftest_step(uint32_t eip) {
+  if (detached)
+    return;
+
   CPU_state ref_r;
 
   if (is_skip_dut) {
@@ -83,4 +96,15 @@ void difftest_step(uint32_t eip) {
     printf("Difference at $eip: ref: %x dul: %x\n", ref_r.eip, cpu.eip);
     nemu_state = NEMU_ABORT;
   }
+}
+
+void difftest_sync() {
+  ref_difftest_memcpy_from_dut(0, guest_to_host(0), 0x7c00);
+  ref_difftest_memcpy_from_dut(ENTRY_START, guest_to_host(ENTRY_START), DIFFTEST_REG_SIZE);
+  CPU_state ref_r;
+  ref_difftest_getregs(&ref_r);
+  ref_r.eax = 0x7e00;
+  ref_r.eip = 0x7e40;
+  ref_difftest_exec(1);
+  ref_difftest_setregs(&cpu);
 }

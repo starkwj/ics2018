@@ -3,7 +3,7 @@
 #include <signal.h>
 
 typedef uint32_t paddr_t;
-#define DIFFTEST_REG_SIZE (sizeof(uint32_t) * 9) // GPRs + EIP
+#define DIFFTEST_REG_SIZE (sizeof(uint32_t) * 10) // GPRs + EIP
 
 bool gdb_connect_qemu(void);
 bool gdb_memcpy_to_qemu(uint32_t, void *, int);
@@ -64,6 +64,10 @@ static uint8_t mbr[] = {
   0x17, 0x00, 0x2c, 0x7c, 0x00, 0x00
 };
 
+static uint8_t lidt[] = {
+  0x0f, 0x01, 0x18
+};
+
 void difftest_init(void) {
   int ppid_before_fork = getpid();
   int pid = fork();
@@ -101,6 +105,10 @@ void difftest_init(void) {
 
     // put the MBR code to QEMU to enable protected mode
     bool ok = gdb_memcpy_to_qemu(0x7c00, mbr, sizeof(mbr));
+    assert(ok == 1);
+
+    // for lidt
+    ok = gdb_memcpy_to_qemu(0x7e40, lidt, sizeof(lidt));
     assert(ok == 1);
 
     union gdb_regs r;

@@ -125,6 +125,9 @@ static int cmd_w(char *args) {
   return 0;
 }
 
+extern bool detached;
+extern void difftest_sync();
+
 static int cmd_d(char *args) {
   char *arg = strtok(NULL, " ");
   if (!arg) {
@@ -135,6 +138,18 @@ static int cmd_d(char *args) {
   return 0;
 }
 
+static int cmd_detach(char *args) {
+  detached = true;
+  printf("DiffTest is closed.\n");
+  return 0;
+}
+
+static int cmd_attach(char *args) {
+  detached = false;
+  difftest_sync();
+  printf("DiffTest is opened.\n");
+  return 0;
+}
 
 static struct {
   char *name;
@@ -152,8 +167,8 @@ static struct {
   { "x", "Examining memory", cmd_x },
   { "w", "Set watchpoint to EXPR", cmd_w },
   { "d", "Delete watchpoint", cmd_d },
-  // { "detach", "quit DiffTest", cmd_detach },
-  // { "attach", "enter DiffTest", cmd_attach },
+  { "detach", "Quit DiffTest mode", cmd_detach },
+  { "attach", "Enter DiffTest mode", cmd_attach },
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
