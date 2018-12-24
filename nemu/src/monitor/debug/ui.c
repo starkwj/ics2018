@@ -125,9 +125,6 @@ static int cmd_w(char *args) {
   return 0;
 }
 
-extern bool detached;
-extern void difftest_sync();
-
 static int cmd_d(char *args) {
   char *arg = strtok(NULL, " ");
   if (!arg) {
@@ -137,6 +134,10 @@ static int cmd_d(char *args) {
   free_wp_no(atoi(arg));
   return 0;
 }
+
+// for DiffTest
+extern bool detached;
+extern void difftest_sync();
 
 static int cmd_detach(char *args) {
   detached = true;
@@ -148,6 +149,30 @@ static int cmd_attach(char *args) {
   detached = false;
   difftest_sync();
   printf("DiffTest is opened.\n");
+  return 0;
+}
+
+static int cmd_save(char *args) {
+  FILE *f = fopen(args, "wb");
+  if (f == NULL) {
+    printf("Can't open file '%s'.\n", args);
+    return -1;
+  }
+  if (fwrite(&cpu, sizeof(cpu), 1, f) != sizeof(cpu))
+    printf("save failed.\n");
+  fclose(f);
+  return 0;
+}
+
+static int cmd_load(char *args) {
+  FILE *f = fopen(args, "rb");
+  if (f == NULL) {
+    printf("Can't open file '%s'.\n", args);
+    return -1;
+  }
+  if (fread(&cpu, sizeof(cpu), 1, f) != sizeof(cpu))
+    printf("load failed.\n");
+  fclose(f);
   return 0;
 }
 
@@ -169,6 +194,8 @@ static struct {
   { "d", "Delete watchpoint", cmd_d },
   { "detach", "Quit DiffTest mode", cmd_detach },
   { "attach", "Enter DiffTest mode", cmd_attach },
+  { "save", "save NEMU snapshot to path", cmd_save },
+  { "load", "load NEMU snapshot from path", cmd_load },
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))

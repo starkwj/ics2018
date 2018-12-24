@@ -58,7 +58,7 @@ void init_difftest(char *ref_so_file, long img_size) {
   ref_difftest_init();
   ref_difftest_memcpy_from_dut(ENTRY_START, guest_to_host(ENTRY_START), img_size);
   ref_difftest_setregs(&cpu);
-  detached = false;
+  detached = true;
 }
 
 void difftest_step(uint32_t eip) {
