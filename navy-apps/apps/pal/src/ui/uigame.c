@@ -113,7 +113,6 @@ PAL_OpeningMenu(
          //
          // Start a new game
          //
-         printf("start\n");
          wItemSelected = 0;
          break;
       }
@@ -122,7 +121,6 @@ PAL_OpeningMenu(
          //
          // Load game
          //
-         printf("load\n");
          wItemSelected = PAL_SaveSlotMenu(1);
          if (wItemSelected != MENUITEM_VALUE_CANCELLED)
          {

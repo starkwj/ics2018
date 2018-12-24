@@ -152,6 +152,8 @@ static struct {
   { "x", "Examining memory", cmd_x },
   { "w", "Set watchpoint to EXPR", cmd_w },
   { "d", "Delete watchpoint", cmd_d },
+  // { "detach", "quit DiffTest", cmd_detach },
+  // { "attach", "enter DiffTest", cmd_attach },
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
