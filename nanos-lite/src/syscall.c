@@ -1,6 +1,7 @@
 #include "common.h"
 #include "syscall.h"
 #include "fs.h"
+#include "proc.h"
 
 long sys_write(int fd, const void *buf, size_t count) {
   if (buf == NULL) {
@@ -18,6 +19,11 @@ long sys_write(int fd, const void *buf, size_t count) {
   return i;
 }
 
+int sys_execve(const char *filename, char *const argv[], char *const envp[]) {
+  naive_uload(NULL, filename);
+  return 0;
+}
+
 _Context* do_syscall(_Context *c) {
   uintptr_t a[4];
   a[0] = c->GPR1;
@@ -27,7 +33,8 @@ _Context* do_syscall(_Context *c) {
 
   switch (a[0]) {
     case SYS_exit:
-      _halt(a[1]);
+      // _halt(a[1]);
+
       c->GPRx = 0;
       break;
     case SYS_yield:
@@ -50,6 +57,9 @@ _Context* do_syscall(_Context *c) {
       break;
     case SYS_brk:
       c->GPRx = 0;
+      break;
+    case SYS_execve:
+      sys_execve((const char *)a[1], (char *const *)a[2], (char *const *)a[3]);
       break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
