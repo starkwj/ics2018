@@ -106,5 +106,6 @@ void difftest_sync() {
   ref_r.eax = 0x7e00;
   ref_r.eip = 0x7e40;
   ref_difftest_exec(1);
+  printf("eax:%d edx:%d eip:%d esp:%d\n", cpu.eax, cpu.edx, cpu.eip, cpu.esp);
   ref_difftest_setregs(&cpu);
 }
