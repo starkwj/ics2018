@@ -4,6 +4,7 @@
 /* shared by all helper functions */
 DecodeInfo decoding;
 rtlreg_t t0, t1, t2, t3, at;
+const rtlreg_t tzero = 0; // added for zero reg
 
 void decoding_set_jmp(bool is_jmp) {
   decoding.is_jmp = is_jmp;
@@ -41,7 +42,10 @@ static inline make_DopHelper(SI) {
    *
    op->simm = ???
    */
-  TODO();
+  op->simm = (int32_t)instr_fetch(eip, op->width);
+  if (op->width == 1) {
+    op->simm = (op->simm << 24) >> 24;
+  }
 
   rtl_li(&op->val, op->simm);
 
@@ -321,6 +325,17 @@ make_DHelper(out_a2dx) {
 #ifdef DEBUG
   sprintf(id_dest->str, "(%%dx)");
 #endif
+}
+
+make_DHelper(stos) {
+  if (decoding.is_operand_size_16)
+    id_src->width = 2;
+  else
+    id_src->width = 4;
+  id_src->type = OP_TYPE_REG;
+  rtl_lr(&id_src->val, R_EAX, id_src->width);
+  id_dest->type = OP_TYPE_MEM;
+  rtl_lm(&id_dest->val, &reg_l(R_EDI), 4);
 }
 
 void operand_write(Operand *op, rtlreg_t* src) {

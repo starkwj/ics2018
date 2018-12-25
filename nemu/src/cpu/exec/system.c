@@ -1,10 +1,19 @@
 #include "cpu/exec.h"
+#include "device/port-io.h"
 
 void difftest_skip_ref();
 void difftest_skip_dut();
 
 make_EHelper(lidt) {
-  TODO();
+  // TODO();
+  if (decoding.is_operand_size_16) {
+    cpu.IDTR.LIMIT = vaddr_read(id_dest->addr, 2);
+    cpu.IDTR.BASE = vaddr_read(id_dest->addr + 2, 3);
+  }
+  else {
+    cpu.IDTR.LIMIT = vaddr_read(id_dest->addr, 2);
+    cpu.IDTR.BASE = vaddr_read(id_dest->addr + 2, 4);
+  }
 
   print_asm_template1(lidt);
 }
@@ -26,7 +35,9 @@ make_EHelper(mov_cr2r) {
 }
 
 make_EHelper(int) {
-  TODO();
+  // TODO();
+  t0 = id_dest->val & 0xff;
+  raise_intr(t0, decoding.seq_eip);
 
   print_asm("int %s", id_dest->str);
 
@@ -36,13 +47,31 @@ make_EHelper(int) {
 }
 
 make_EHelper(iret) {
-  TODO();
+  // TODO();
+  rtl_pop(&t0);
+  rtl_pop(&cpu.cs);
+  rtl_pop(&cpu.eflags._32);
+  rtl_jr(&t0);
 
   print_asm("iret");
 }
 
 make_EHelper(in) {
-  TODO();
+  // TODO();
+  switch (id_dest->width) {
+    case 4:
+      t0 = pio_read_l(id_src->val);
+      break;
+    case 1:
+      t0 = pio_read_b(id_src->val);
+      break;
+    case 2:
+      t0 = pio_read_w(id_src->val);
+      break;
+    default:
+      assert(0);
+  }
+  operand_write(id_dest, &t0);
 
   print_asm_template2(in);
 
@@ -52,7 +81,20 @@ make_EHelper(in) {
 }
 
 make_EHelper(out) {
-  TODO();
+  // TODO();
+  switch (id_dest->width) {
+    case 4:
+      pio_write_l(id_dest->val, id_src->val);
+      break;
+    case 1:
+      pio_write_b(id_dest->val, id_src->val);
+      break;
+    case 2:
+      pio_write_w(id_dest->val, id_src->val);
+      break;
+    default:
+      assert(0);
+  }
 
   print_asm_template2(out);
 
