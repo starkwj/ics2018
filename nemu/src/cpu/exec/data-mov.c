@@ -23,13 +23,30 @@ make_EHelper(pop) {
 }
 
 make_EHelper(pusha) {
-  TODO();
+  // TODO();
+  t0 = cpu.esp;
+  rtl_push(&reg_l(R_EAX));
+  rtl_push(&reg_l(R_ECX));
+  rtl_push(&reg_l(R_EDX));
+  rtl_push(&reg_l(R_EBX));
+  rtl_push(&t0);
+  rtl_push(&reg_l(R_EBP));
+  rtl_push(&reg_l(R_ESI));
+  rtl_push(&reg_l(R_EDI));
 
   print_asm("pusha");
 }
 
 make_EHelper(popa) {
-  TODO();
+  // TODO();
+  rtl_pop(&reg_l(R_EDI));
+  rtl_pop(&reg_l(R_ESI));
+  rtl_pop(&reg_l(R_EBP));
+  rtl_pop(&t0);
+  rtl_pop(&reg_l(R_EBX));
+  rtl_pop(&reg_l(R_EDX));
+  rtl_pop(&reg_l(R_ECX));
+  rtl_pop(&reg_l(R_EAX));
 
   print_asm("popa");
 }
@@ -91,4 +108,11 @@ make_EHelper(movzx) {
 make_EHelper(lea) {
   operand_write(id_dest, &id_src->addr);
   print_asm_template2(lea);
+}
+
+make_EHelper(stos) {
+  operand_write(id_dest, &id_src->val);
+  t0 = reg_l(R_EDI);
+  t0 += id_src->width;
+  rtl_sr(R_EDI, &t0, id_src->width);
 }

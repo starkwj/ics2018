@@ -56,3 +56,11 @@ make_EHelper(call_rm);
 
 make_EHelper(in);
 make_EHelper(out);
+
+make_EHelper(lidt);
+make_EHelper(int);
+make_EHelper(iret);
+make_EHelper(pusha);
+make_EHelper(popa);
+
+make_EHelper(stos);

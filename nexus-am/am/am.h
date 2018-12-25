@@ -31,6 +31,8 @@ enum {
 #define _PROT_WRITE  4    // can write
 #define _PROT_EXEC   8    // can execute
 
+#define KEYDOWN_MASK 0x8000
+
 // Memory area for [@start, @end)
 typedef struct _Area {
   void *start, *end;

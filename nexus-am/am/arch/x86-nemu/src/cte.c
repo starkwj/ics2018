@@ -1,16 +1,22 @@
 #include <am.h>
 #include <x86.h>
-
+#include <klib.h>
 static _Context* (*user_handler)(_Event, _Context*) = NULL;
 
 void vectrap();
 void vecnull();
+void vecsys();
 
 _Context* irq_handle(_Context *tf) {
   _Context *next = tf;
+  // printf("eax: %x ecx: %x esi:%x edi:%x\n", tf->eax, tf->ecx, tf->esi, tf->edi);
+  // printf("irq: %x\n", tf->irq);
+  // printf("eip: %x cs: %x eflags:%x\n", tf->eip, tf->cs, tf->eflags);
   if (user_handler) {
     _Event ev = {0};
     switch (tf->irq) {
+      case 0x80: ev.event = _EVENT_SYSCALL; break;
+      case 0x81: ev.event = _EVENT_YIELD; break;
       default: ev.event = _EVENT_ERROR; break;
     }
 
@@ -32,6 +38,7 @@ int _cte_init(_Context*(*handler)(_Event, _Context*)) {
   }
 
   // -------------------- system call --------------------------
+  idt[0x80] = GATE(STS_TG32, KSEL(SEG_KCODE), vecsys, DPL_KERN);
   idt[0x81] = GATE(STS_TG32, KSEL(SEG_KCODE), vectrap, DPL_KERN);
 
   set_idt(idt, sizeof(idt));

@@ -75,7 +75,7 @@ void* memset(void* v,int c,size_t n) {
   assert(v != NULL);
   size_t i;
   for (i = 0; i < n; i++) {
-    *((char *)v + i) = (char)c;
+    *((uint8_t *)(v + i)) = c;
   }
   return v;
 }

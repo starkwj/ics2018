@@ -135,6 +135,50 @@ static int cmd_d(char *args) {
   return 0;
 }
 
+// for DiffTest
+extern bool detached;
+extern void difftest_sync();
+
+static int cmd_detach(char *args) {
+  detached = true;
+  printf("DiffTest is closed.\n");
+  return 0;
+}
+
+static int cmd_attach(char *args) {
+  detached = false;
+  difftest_sync();
+  printf("DiffTest is opened.\n");
+  return 0;
+}
+
+static int cmd_save(char *args) {
+  FILE *f = fopen(args, "wb");
+  if (f == NULL) {
+    printf("Can't open file '%s'.\n", args);
+    return 0;
+  }
+  if (fwrite(&cpu, sizeof(cpu), 1, f) != 1)
+    printf("save regs failed.\n");
+  if (fwrite(guest_to_host(0), 1, PMEM_SIZE, f) != PMEM_SIZE)
+    printf("save mem failed.\n");
+  fclose(f);
+  return 0;
+}
+
+static int cmd_load(char *args) {
+  FILE *f = fopen(args, "rb");
+  if (f == NULL) {
+    printf("Can't open file '%s'.\n", args);
+    return 0;
+  }
+  if (fread(&cpu, sizeof(cpu), 1, f) != 1)
+    printf("load regs failed.\n");
+  if (fread(guest_to_host(0), 1, PMEM_SIZE, f) != PMEM_SIZE)
+    printf("load mem failed.\n");
+  fclose(f);
+  return 0;
+}
 
 static struct {
   char *name;
@@ -152,6 +196,10 @@ static struct {
   { "x", "Examining memory", cmd_x },
   { "w", "Set watchpoint to EXPR", cmd_w },
   { "d", "Delete watchpoint", cmd_d },
+  { "detach", "Quit DiffTest mode", cmd_detach },
+  { "attach", "Enter DiffTest mode", cmd_attach },
+  { "save", "save NEMU snapshot to path", cmd_save },
+  { "load", "load NEMU snapshot from path", cmd_load },
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
