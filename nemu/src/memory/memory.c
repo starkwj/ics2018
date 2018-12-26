@@ -51,26 +51,26 @@ void vaddr_write(vaddr_t addr, uint32_t data, int len) {
 
 paddr_t page_translate(vaddr_t vaddr, bool write) {
   if (cpu.cr0.paging && cpu.cr0.protect_enable) {
-    // PDE *ppde = guest_to_host(((cpu.cr3.val & ~0xfff) | PDX(vaddr)));
-    // assert(ppde->present);
-    // ppde->accessed = 1;
-    // PTE *ppte = guest_to_host((PTE_ADDR(ppde->val) | PTX(vaddr)));
-    // assert(ppte->present);
-    // ppte->accessed = 1;
-    // if (write)
-    //   ppte->dirty = 1;
-    // return PTE_ADDR(ppte->val) | OFF(vaddr);
+    PDE *ppde = guest_to_host(((cpu.cr3.val & ~0xfff) | PDX(vaddr)));
+    assert(ppde->present);
+    ppde->accessed = 1;
+    PTE *ppte = guest_to_host((PTE_ADDR(ppde->val) | PTX(vaddr)));
+    assert(ppte->present);
+    ppte->accessed = 1;
+    if (write)
+      ppte->dirty = 1;
+    return PTE_ADDR(ppte->val) | OFF(vaddr);
 
-    PDE *ppde = (PDE *)(intptr_t)paddr_read(cpu.cr3.val & ~0xfff, 4);
-    assert(ppde[PDX(vaddr)].present);
-    ppde[PDX(vaddr)].accessed = 1;
-    PTE *ppte = (PTE *)(intptr_t)paddr_read(ppde[PDX(vaddr)].val & ~0xfff, 4);
-    assert(ppte[PTX(vaddr)].present);
-    ppte[PTX(vaddr)].accessed = 1;
-    if (write) {
-      ppte[PTX(vaddr)].dirty = 1;
-    }
-    return PTE_ADDR(ppte[PTX(vaddr)].val) | OFF(vaddr);
+    // PDE *ppde = (PDE *)(intptr_t)paddr_read(cpu.cr3.val & ~0xfff, 4);
+    // assert(ppde[PDX(vaddr)].present);
+    // ppde[PDX(vaddr)].accessed = 1;
+    // PTE *ppte = (PTE *)(intptr_t)paddr_read(ppde[PDX(vaddr)].val & ~0xfff, 4);
+    // assert(ppte[PTX(vaddr)].present);
+    // ppte[PTX(vaddr)].accessed = 1;
+    // if (write) {
+    //   ppte[PTX(vaddr)].dirty = 1;
+    // }
+    // return PTE_ADDR(ppte[PTX(vaddr)].val) | OFF(vaddr);
 
   }
   else {
