@@ -1,4 +1,5 @@
 #include <x86.h>
+#include <klib.h>
 
 #define PG_ALIGN __attribute((aligned(PGSIZE)))
 
@@ -41,7 +42,7 @@ int _vme_init(void* (*pgalloc_f)(size_t), void (*pgfree_f)(void*)) {
       }
     }
   }
-
+  printf("%x %x %x", kpdirs, &kpdirs[0], &kpdirs[1]);
   set_cr3(kpdirs);
   set_cr0(get_cr0() | CR0_PG);
 
