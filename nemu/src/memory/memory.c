@@ -71,7 +71,7 @@ paddr_t page_translate(vaddr_t vaddr, bool write) {
       printf("pmem=%lx  guesttohost(0)=%p\n", (intptr_t)pmem, guest_to_host(0));
       printf("ppde1=%p  &ppde[]=%p\n", ppde1, &ppde[PDX(vaddr)]);
       printf("pde1=%x pde=%x\n", ppde1->val, pde.val);
-      assert(0);
+      // assert(0);
     }
     assert(pde.present);
     pde.accessed = 1;
