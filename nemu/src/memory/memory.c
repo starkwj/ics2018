@@ -50,7 +50,6 @@ void vaddr_write(vaddr_t addr, uint32_t data, int len) {
 }
 
 paddr_t page_translate(vaddr_t vaddr, bool write) {
-  printf("page_translate: cr0 prot:%d\n", cpu.cr0.protect_enable);
   if (cpu.cr0.paging && cpu.cr0.protect_enable) {
     PDE *ppde = guest_to_host(((cpu.cr3.val & ~0xfff) | PDX(vaddr)));
     assert(ppde->present);
