@@ -13,7 +13,7 @@ void switch_boot_pcb() {
 void hello_fun(void *arg) {
   int j = 1;
   while (1) {
-    // Log("Hello World from Nanos-lite for the %dth time!", j);
+    Log("Hello World from Nanos-lite for the %dth time!", j);
     j ++;
     _yield();
   }
@@ -23,14 +23,15 @@ extern void context_kload(PCB *pcb, void *entry);
 extern void context_uload(PCB *pcb, const char *filename);
 void init_proc() {
   // naive_uload(NULL, "/bin/init");
-  context_kload(&pcb[0], (void *)hello_fun);
+  // context_kload(&pcb[0], (void *)hello_fun);
   // context_uload(&pcb[0], "/bin/hello");
-  context_uload(&pcb[1], "/bin/init");
+  // context_uload(&pcb[1], "/bin/init");
+  context_uload(&pcb[0], "/bin/dummy");
   switch_boot_pcb();
 }
 
 _Context* schedule(_Context *prev) {
   current->cp = prev;
-  current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
+  // current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
   return current->cp;
 }

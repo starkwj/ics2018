@@ -1,7 +1,8 @@
 #include "proc.h"
 #include "fs.h"
 
-#define DEFAULT_ENTRY 0x4000000
+// #define DEFAULT_ENTRY 0x4000000
+#define DEFAULT_ENTRY 0x8048000
 
 extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
 extern size_t get_ramdisk_size();
@@ -10,11 +11,25 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   // TODO();
   // ramdisk_read((void *)DEFAULT_ENTRY, 0, get_ramdisk_size());
   int fd = fs_open(filename, 0, 0);
+  void *base = NULL;
   if (fd >= 0) {
-    fs_read(fd, (void *)DEFAULT_ENTRY, fs_filesz(fd));
+    uint32_t sz = fs_filesz(fd);
+    if (sz > 0) {
+      uint32_t pg_num = (sz - 1) / PGSIZE + 1;
+      base = new_page(pg_num);
+      void *p = base;
+      void *v = (void *)DEFAULT_ENTRY;
+      int i;
+      for (i = 0; i < pg_num - 1; i++, p += PGSIZE, v += PGSIZE) {
+        _map(&pcb->as, v, p, 1);
+        fs_read(fd, p, PGSIZE);
+      }
+      _map(&pcb->as, v, p, 1);
+      fs_read(fd, p, sz & PGMASK);
+    }
     fs_close(fd);
   }
-  return DEFAULT_ENTRY;
+  return (uintptr_t)base;
 }
 
 void naive_uload(PCB *pcb, const char *filename) {
@@ -31,6 +46,7 @@ void context_kload(PCB *pcb, void *entry) {
 }
 
 void context_uload(PCB *pcb, const char *filename) {
+  _protect(&pcb->as);
   uintptr_t entry = loader(pcb, filename);
 
   _Area stack;

@@ -7,7 +7,10 @@ void vectrap();
 void vecnull();
 void vecsys();
 
+extern void get_cur_as(_Context *c);
+extern void _switch(_Context *c);
 _Context* irq_handle(_Context *tf) {
+  get_cur_as(tf);
   _Context *next = tf;
   // printf("eax: %x ecx: %x esi:%x edi:%x\n", tf->eax, tf->ecx, tf->esi, tf->edi);
   // printf("irq: %x\n", tf->irq);
@@ -25,7 +28,7 @@ _Context* irq_handle(_Context *tf) {
       next = tf;
     }
   }
-
+  _switch(next);
   return next;
 }
 
