@@ -68,7 +68,8 @@ paddr_t page_translate(vaddr_t vaddr, bool write) {
     pde.val = paddr_read((intptr_t)&ppde[PDX(vaddr)], 4);
     if (ppde1->val != pde.val) {
       printf("vaadr=%x\n", vaddr);
-      printf("pmem=%lx  cr3=%x\n", (intptr_t)pmem, cpu.cr3.val);
+      printf("pmem=%lx  guesttohost(0)=%p\n", (intptr_t)pmem, guest_to_host(0));
+      // printf("ppde1=%x ppde[PDX(vaddr)]=%x\n", ppde1, &ppde[PDX(vaddr)]);
       printf("pde1=%x pde=%x\n", ppde1->val, pde.val);
       assert(0);
     }
