@@ -1,5 +1,5 @@
 #include <x86.h>
-
+#include "klib.h"
 #define PG_ALIGN __attribute((aligned(PGSIZE)))
 
 static PDE kpdirs[NR_PDE] PG_ALIGN;
@@ -77,6 +77,7 @@ void _switch(_Context *c) {
 }
 
 int _map(_Protect *p, void *va, void *pa, int mode) {
+  printf("va=%x pa=%x\n", va, pa);
   PDE *updir = p->ptr;
   PDE pde = updir[PDX(va)];
   if ((pde & PTE_P) == 0) {
