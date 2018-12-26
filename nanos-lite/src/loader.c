@@ -10,7 +10,6 @@ extern size_t get_ramdisk_size();
 static uintptr_t loader(PCB *pcb, const char *filename) {
   // TODO();
   // ramdisk_read((void *)DEFAULT_ENTRY, 0, get_ramdisk_size());
-  printf("t1\n");
   int fd = fs_open(filename, 0, 0);
   void *base = NULL;
   if (fd >= 0) {
