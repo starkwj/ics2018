@@ -18,6 +18,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
       uint32_t pg_num = (sz - 1) / PGSIZE + 1;
       base = new_page(pg_num);
       void *p = base;
+      printf("base = %x\n", base);
       void *v = (void *)DEFAULT_ENTRY;
       int i;
       for (i = 0; i < pg_num - 1; i++, p += PGSIZE, v += PGSIZE) {
