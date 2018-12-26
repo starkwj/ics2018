@@ -51,17 +51,28 @@ void vaddr_write(vaddr_t addr, uint32_t data, int len) {
 
 paddr_t page_translate(vaddr_t vaddr, bool write) {
   if (cpu.cr0.paging && cpu.cr0.protect_enable) {
+
+    PDE *ppde1 = guest_to_host(((cpu.cr3.val & ~0xfff) | PDX(vaddr)));
+    // printf("ppde=%x, ppde->val=%x\n", ppde, ppde->val);
+    // assert(ppde->present);
+    // ppde->accessed = 1;
+    // PTE *ppte = guest_to_host((PTE_ADDR(ppde->val) | PTX(vaddr)));
+    // assert(ppte->present);
+    // ppte->accessed = 1;
+    // if (write)
+    //   ppte->dirty = 1;
+    // return PTE_ADDR(ppte->val) | OFF(vaddr);
+
     PDE *ppde = (PDE *)(intptr_t)(cpu.cr3.val & ~0xfff);
-    // PDE *ppde1 = (PDE *)(intptr_t)(cpu.cr3.val & ~0xfff) + PDX(vaddr);
     PDE pde;
     pde.val = paddr_read((intptr_t)&ppde[PDX(vaddr)], 4);
-    // if (ppde1->val != pde.val) {
-    //   printf("vaadr=%x   cr3=%x\n", vaddr, cpu.cr3.val);
-    //   printf("pmem=%lx  guesttohost(0)=%p\n", (intptr_t)pmem, guest_to_host(0));
-    //   printf("ppde1=%p  &ppde[]=%p\n", ppde1, &ppde[PDX(vaddr)]);
-    //   printf("pde1=%x pde=%x\n", ppde1->val, pde.val);
-    //   assert(0);
-    // }
+    if (ppde1->val != pde.val) {
+      printf("vaadr=%x   cr3=%x\n", vaddr, cpu.cr3.val);
+      printf("pmem=%lx  guesttohost(0)=%p\n", (intptr_t)pmem, guest_to_host(0));
+      printf("ppde1=%p  &ppde[]=%p\n", ppde1, &ppde[PDX(vaddr)]);
+      printf("pde1=%x pde=%x\n", ppde1->val, pde.val);
+      assert(0);
+    }
     assert(pde.present);
     pde.accessed = 1;
     PTE *ppte = (PTE *)(intptr_t)(pde.val & ~0xfff);
