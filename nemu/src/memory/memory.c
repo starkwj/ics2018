@@ -53,7 +53,7 @@ paddr_t page_translate(vaddr_t vaddr, bool write) {
   if (cpu.cr0.paging && cpu.cr0.protect_enable) {
     printf("vaadr=%x\n", vaddr);
 
-    // PDE *ppde = guest_to_host(((cpu.cr3.val & ~0xfff) | PDX(vaddr)));
+    PDE *ppde1 = guest_to_host(((cpu.cr3.val & ~0xfff) | PDX(vaddr)));
     // printf("ppde=%x, ppde->val=%x\n", ppde, ppde->val);
     // assert(ppde->present);
     // ppde->accessed = 1;
@@ -67,6 +67,7 @@ paddr_t page_translate(vaddr_t vaddr, bool write) {
     PDE *ppde = (PDE *)(intptr_t)(cpu.cr3.val & ~0xfff);
     PDE pde;
     pde.val = paddr_read((intptr_t)&ppde[PDX(vaddr)], 4);
+    printf("pde1=%x pde=%x\n", ppde1->val, pde.val);
     assert(pde.present);
     pde.accessed = 1;
     PTE *ppte = (PTE *)(intptr_t)(pde.val & ~0xfff);
