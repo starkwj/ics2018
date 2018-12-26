@@ -75,7 +75,6 @@ paddr_t page_translate(vaddr_t vaddr, bool write) {
       ppte->dirty = 1;
     }
     return PTE_ADDR(ppte->val) | OFF(vaddr);
-
   }
   else {
     return vaddr;
