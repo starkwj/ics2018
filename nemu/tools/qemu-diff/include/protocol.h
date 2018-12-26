@@ -24,6 +24,7 @@ union gdb_regs {
     uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
     uint32_t eip, eflags;
     uint32_t cs, ss, ds, es, fs, gs;
+    uint32_t cr0, cr3;
   };
   struct {
     uint32_t array[77];

@@ -63,6 +63,7 @@ int _protect(_Protect *p) {
 }
 
 void _unprotect(_Protect *p) {
+  pgfree_usr(p->ptr);
 }
 
 static _Protect *cur_as = NULL;
@@ -76,6 +77,15 @@ void _switch(_Context *c) {
 }
 
 int _map(_Protect *p, void *va, void *pa, int mode) {
+  PDE *updir = p->ptr;
+  PDE pde = updir[PDX(va)];
+  if ((pde & PTE_P) == 0) {
+    // pde is not present
+    pde = (PDE)(pgalloc_usr(1)) | PTE_P;
+    updir[PDX(va)] = pde;
+  }
+  PTE *ppte = (PTE *)(PTE_ADDR(pde));
+  ppte[PTX(va)] = PTE_ADDR(pa) | PTE_P;
   return 0;
 }
 

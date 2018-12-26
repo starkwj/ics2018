@@ -12,6 +12,7 @@ void* new_page(size_t nr_page) {
 
 void free_page(void *p) {
   panic("not implement yet");
+  pf -= PGSIZE;
 }
 
 /* The brk() system call handler. */
