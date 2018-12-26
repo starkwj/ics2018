@@ -51,7 +51,6 @@ void vaddr_write(vaddr_t addr, uint32_t data, int len) {
 
 paddr_t page_translate(vaddr_t vaddr, bool write) {
   if (cpu.cr0.paging && cpu.cr0.protect_enable) {
-    printf("vaadr=%x\n", vaddr);
 
     PDE *ppde1 = guest_to_host(((cpu.cr3.val & ~0xfff) | PDX(vaddr)));
     // printf("ppde=%x, ppde->val=%x\n", ppde, ppde->val);
@@ -67,7 +66,12 @@ paddr_t page_translate(vaddr_t vaddr, bool write) {
     PDE *ppde = (PDE *)(intptr_t)(cpu.cr3.val & ~0xfff);
     PDE pde;
     pde.val = paddr_read((intptr_t)&ppde[PDX(vaddr)], 4);
-    printf("pde1=%x pde=%x\n", ppde1->val, pde.val);
+    if (ppde1->val != pde.val) {
+      printf("vaadr=%x\n", vaddr);
+      printf("pmem=%hhn  cr3=%x\n", pmem, cpu.cr3.val);
+      printf("pde1=%x pde=%x\n", ppde1->val, pde.val);
+      assert(0);
+    }
     assert(pde.present);
     pde.accessed = 1;
     PTE *ppte = (PTE *)(intptr_t)(pde.val & ~0xfff);
