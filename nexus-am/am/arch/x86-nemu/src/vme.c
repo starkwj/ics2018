@@ -70,15 +70,17 @@ static _Protect *cur_as = NULL;
 void get_cur_as(_Context *c) {
   c->prot = cur_as;
 }
-#include "klib.h"
+// #include "klib.h"
 void _switch(_Context *c) {
-  printf("set cr3 = %x\n", c->prot->ptr);
+  // printf("set cr3 = %x\n", c->prot->ptr);
+  if (c->prot->ptr == NULL) {
+    c->prot->ptr = kpdirs;
+  }
   set_cr3(c->prot->ptr);
   cur_as = c->prot;
 }
 
 int _map(_Protect *p, void *va, void *pa, int mode) {
-  printf("p->ptr = %x\n", p->ptr);
   PDE *updir = p->ptr;
   PDE pde = updir[PDX(va)];
   if ((pde & PTE_P) == 0) {
