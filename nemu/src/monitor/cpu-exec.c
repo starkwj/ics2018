@@ -44,7 +44,6 @@ void cpu_exec(uint64_t n) {
     if (check_wp()) {
       nemu_state = NEMU_STOP;
       printf("Watchpoint(s) has been triggered.\n");
-      monitor_statistic();
       return;
     }
 #endif
