@@ -100,6 +100,5 @@ _Context *_ucontext(_Protect *p, _Area ustack, _Area kstack, void *entry, void *
   c->esp = *(uintptr_t*)ustack.end;
   c->ebp = *(uintptr_t*)ustack.start;
   c->prot = p;
-    c->eflags = 0x2 | (1 << 9);
   return c;
 }
