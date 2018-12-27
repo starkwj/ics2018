@@ -72,8 +72,8 @@ void get_cur_as(_Context *c) {
 }
 
 void _switch(_Context *c) {
-  if (c->prot->ptr == NULL) {
-    c->prot->ptr = kpdirs;
+  if (c->prot == NULL) {
+    return;
   }
   set_cr3(c->prot->ptr);
   cur_as = c->prot;
