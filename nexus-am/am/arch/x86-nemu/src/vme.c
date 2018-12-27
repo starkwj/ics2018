@@ -50,6 +50,7 @@ int _vme_init(void* (*pgalloc_f)(size_t), void (*pgfree_f)(void*)) {
 #include "klib.h"
 int _protect(_Protect *p) {
   PDE *updir = (PDE*)(pgalloc_usr(1));
+  printf("kpdir: %x\n", kpdirs);
   printf("updir: %x\n", updir);
   p->pgsize = 4096;
   p->ptr = updir;
