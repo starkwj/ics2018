@@ -33,8 +33,8 @@ _Context* do_syscall(_Context *c) {
 
   switch (a[0]) {
     case SYS_exit:
-      // _halt(a[1]);
-      sys_execve("/bin/init", NULL, NULL);
+      _halt(a[1]);
+      // sys_execve("/bin/init", NULL, NULL);
       c->GPRx = 0;
       break;
     case SYS_yield:

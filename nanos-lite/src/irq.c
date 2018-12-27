@@ -1,14 +1,5 @@
 #include "common.h"
 
-// enum {
-//   _EVENT_NULL = 0,
-//   _EVENT_ERROR,
-//   _EVENT_IRQ_TIMER,
-//   _EVENT_IRQ_IODEV,
-//   _EVENT_PAGEFAULT,
-//   _EVENT_YIELD,
-//   _EVENT_SYSCALL,
-// };
 extern _Context* do_syscall(_Context *c);
 extern _Context* schedule(_Context *prev);
 
