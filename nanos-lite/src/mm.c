@@ -11,13 +11,23 @@ void* new_page(size_t nr_page) {
 }
 
 void free_page(void *p) {
-  panic("not implement yet");
+  panic("not implement yet or no need to implement");
   pf -= PGSIZE;
 }
 
 /* The brk() system call handler. */
 int mm_brk(uintptr_t new_brk) {
-  
+  if (new_brk > current->max_brk) {
+    uint32_t va = current->max_brk & ~0xfff;
+    uint32_t newpf = new_brk & ~0xfff;
+    while (va < newpf) {
+      void *pa = new_page(1);
+      _map(&current->as, (void *)va, pa, 0);
+      va += PGSIZE;
+    }
+    current->max_brk = new_brk;
+  }
+  current->cur_brk = new_brk;
   return 0;
 }
 
