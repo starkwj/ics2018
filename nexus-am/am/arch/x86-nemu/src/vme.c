@@ -70,8 +70,9 @@ static _Protect *cur_as = NULL;
 void get_cur_as(_Context *c) {
   c->prot = cur_as;
 }
-
+#include "klib.h"
 void _switch(_Context *c) {
+  printf("set cr3 = %x\n", c->prot->ptr);
   set_cr3(c->prot->ptr);
   cur_as = c->prot;
 }
