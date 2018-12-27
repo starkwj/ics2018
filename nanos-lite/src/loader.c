@@ -6,6 +6,7 @@
 
 extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
 extern size_t get_ramdisk_size();
+extern char _end;
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
   // TODO();
@@ -35,6 +36,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
       _map(&pcb->as, v, p, 1);
       fs_read(fd, p, sz & PGMASK);
     }
+    printf("_end=%x fileend=%x\n", &_end, DEFAULT_ENTRY + sz);
     fs_close(fd);
   }
   return DEFAULT_ENTRY;
