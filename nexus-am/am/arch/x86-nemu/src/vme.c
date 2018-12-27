@@ -97,6 +97,6 @@ _Context *_ucontext(_Protect *p, _Area ustack, _Area kstack, void *entry, void *
   _Context *c = (_Context*)ustack.end - 1;
   c->cs = 8;
   c->eip = (uintptr_t)entry;
-  c->prot = p;
+  // c->prot = p;
   return c;
 }
