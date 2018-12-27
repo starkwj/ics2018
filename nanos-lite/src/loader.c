@@ -30,7 +30,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     }
     fs_close(fd);
   }
-  return (uintptr_t)base;
+  return DEFAULT_ENTRY;
 }
 
 void naive_uload(PCB *pcb, const char *filename) {
