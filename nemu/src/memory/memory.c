@@ -32,12 +32,10 @@ void paddr_write(paddr_t addr, uint32_t data, int len) {
 uint32_t vaddr_read(vaddr_t addr, int len) {
   if (OFF(addr) + len > 0x1000) {
     // assert(0);
-    uint32_t ret = 0;
-    int i;
-    for (i = 0; i < len; i++) {
-      uint32_t tmp = paddr_read(page_translate(addr + i, false), 1);
-      ret += tmp << (i << 3);
-    }
+    uint32_t len1 = 4 - (addr & 0x3);
+    uint32_t len2 = len - len1;
+    uint32_t ret = paddr_read(page_translate(addr, false), len1);
+    ret += paddr_read(page_translate(addr + len1, false), len2) << (len1 << 3);
     return ret;
   }
   else {
