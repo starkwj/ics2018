@@ -23,12 +23,13 @@ extern void context_kload(PCB *pcb, void *entry);
 extern void context_uload(PCB *pcb, const char *filename);
 void init_proc() {
   // naive_uload(NULL, "/bin/init");
-  context_kload(&pcb[0], (void *)hello_fun);
+  // context_kload(&pcb[0], (void *)hello_fun);
   // context_uload(&pcb[0], "/bin/hello");
-  // context_uload(&pcb[0], "/bin/pal");
+  context_uload(&pcb[0], "/bin/init");
   // context_uload(&pcb[1], "/bin/pal");
   // context_uload(&pcb[0], "/bin/dummy");
   // context_uload(&pcb[0], "/bin/pal");
+  printf("load over\n");
   switch_boot_pcb();
 }
 

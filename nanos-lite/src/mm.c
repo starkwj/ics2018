@@ -18,10 +18,12 @@ void free_page(void *p) {
 /* The brk() system call handler. */
 int mm_brk(uintptr_t new_brk) {
   if (new_brk > current->max_brk) {
-    uintptr_t va = current->max_brk & ~0xfff;
+    uintptr_t va = (current->max_brk & ~0xfff) + PGSIZE;
     uintptr_t newpf = new_brk & ~0xfff;
-    while (va < newpf) {
+    // printf("mm_brk: va=%x new_brk=%x\n", va, newpf);
+    while (va <= newpf) {
       void *pa = new_page(1);
+      // printf("mm_brk va -> pa : %x -> %x\n", va, pa);
       _map(&current->as, (void *)va, pa, 0);
       va += PGSIZE;
     }
