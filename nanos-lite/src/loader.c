@@ -6,7 +6,6 @@
 
 extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
 extern size_t get_ramdisk_size();
-extern char _end;
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
   // TODO();
@@ -21,11 +20,10 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   int fd = fs_open(filename, 0, 0);
   if (fd >= 0) {
     uint32_t sz = fs_filesz(fd);
+    void *v = (void *)DEFAULT_ENTRY;
     if (sz > 0) {
       int pg_num = (sz - 1) / PGSIZE + 1;
-      // base = new_page(pg_num);
       void *p;
-      void *v = (void *)DEFAULT_ENTRY;
       int i;
       for (i = 0; i < pg_num - 1; i++, v += PGSIZE) {
         p = new_page(1);
@@ -35,8 +33,9 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
       p = new_page(1);
       _map(&pcb->as, v, p, 1);
       fs_read(fd, p, sz & PGMASK);
+      v += PGSIZE;
     }
-    printf("_end=%x fileend=%x\n", &_end, DEFAULT_ENTRY + sz);
+    pcb->cur_brk = pcb->max_brk = (intptr_t)v;
     fs_close(fd);
   }
   return DEFAULT_ENTRY;
