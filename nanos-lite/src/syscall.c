@@ -3,6 +3,8 @@
 #include "fs.h"
 #include "proc.h"
 
+extern int mm_brk(uintptr_t new_brk);
+
 long sys_write(int fd, const void *buf, size_t count) {
   if (buf == NULL) {
     return -1;
@@ -56,7 +58,7 @@ _Context* do_syscall(_Context *c) {
       c->GPRx = fs_lseek(a[1], a[2], a[3]);
       break;
     case SYS_brk:
-      c->GPRx = 0;
+      c->GPRx = mm_brk(a[1]);
       break;
     case SYS_execve:
       sys_execve((const char *)a[1], (char *const *)a[2], (char *const *)a[3]);
