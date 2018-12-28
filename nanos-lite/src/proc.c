@@ -32,12 +32,12 @@ void init_proc() {
   switch_boot_pcb();
 }
 
-// static uint8_t count = 0;
+static uint8_t count = 0;
 _Context* schedule(_Context *prev) {
   current->cp = prev;
   // current = &pcb[0];
-  current = (current == &pcb[0] ? &pcb[fg_pcb] : &pcb[0]);
-  // current = count == 0 ? &pcb[0] : &pcb[1];
-  // count++;
+  // current = (current == &pcb[0] ? &pcb[fg_pcb] : &pcb[0]);
+  current = count == 0 ? &pcb[0] : &pcb[fg_pcb];
+  count++;
   return current->cp;
 }
