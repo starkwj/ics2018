@@ -39,6 +39,7 @@ size_t video_write(uintptr_t reg, void *buf, size_t size) {
       NDL_DrawRect(pixels, x, y, w, h);
       if (ctl->sync) {
         // do nothing, hardware syncs.
+        NDL_Render();
       }
       return sizeof(_FBCtlReg);
     }
