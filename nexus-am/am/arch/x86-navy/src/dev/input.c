@@ -9,7 +9,6 @@ size_t input_read(uintptr_t reg, void *buf, size_t size) {
     case _DEVREG_INPUT_KBD: {
       _KbdReg *kbd = (_KbdReg *)buf;
       NDL_Event e;
-      printf("input test1\n");
       NDL_WaitEvent(&e);
       if (e.type != NDL_EVENT_KEYUP && e.type != NDL_EVENT_KEYDOWN) {
         kbd->keycode = _KEY_NONE;
@@ -18,7 +17,6 @@ size_t input_read(uintptr_t reg, void *buf, size_t size) {
         kbd->keydown = e.type == NDL_EVENT_KEYDOWN;
         kbd->keycode = e.data;
       }
-      printf("input test2\n");
       return sizeof(_KbdReg);
     }
   }

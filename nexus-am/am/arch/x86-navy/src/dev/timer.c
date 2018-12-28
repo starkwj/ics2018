@@ -15,6 +15,7 @@ size_t timer_read(uintptr_t reg, void *buf, size_t size) {
       _UptimeReg *uptime = (_UptimeReg *)buf;
       uptime->hi = 0;
       uptime->lo = e.data - boot_time.lo;
+      printf("time :%x\n", uptime->lo);
       return sizeof(_UptimeReg);
     }
     case _DEVREG_TIMER_DATE: {
