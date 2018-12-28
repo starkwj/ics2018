@@ -33,12 +33,10 @@ size_t timer_read(uintptr_t reg, void *buf, size_t size) {
 
 void timer_init() {
   NDL_Event e;
-  printf("timer_init begin\n");
   do {
     NDL_WaitEvent(&e);
   } while (e.type != NDL_EVENT_TIMER);
   boot_time.hi = 0;
   boot_time.lo = e.data;
-  printf("timer_init over\n");
 }
 
