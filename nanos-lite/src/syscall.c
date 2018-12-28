@@ -22,8 +22,8 @@ long sys_write(int fd, const void *buf, size_t count) {
 }
 
 int sys_execve(const char *filename, char *const argv[], char *const envp[]) {
-  // naive_uload(NULL, filename);
-  context_uload(current, filename);
+  naive_uload(NULL, filename);
+  // context_uload(current, filename);
   return 0;
 }
 
@@ -63,7 +63,7 @@ _Context* do_syscall(_Context *c) {
       break;
     case SYS_execve:
       sys_execve((const char *)a[1], (char *const *)a[2], (char *const *)a[3]);
-      _yield();
+      // _yield();
       c->GPRx = 0;
       break;
     default: panic("Unhandled syscall ID = %d", a[0]);

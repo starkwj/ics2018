@@ -63,6 +63,7 @@ typedef struct {
     uint32_t BASE;
   } IDTR;
 
+  bool INTR;
 
 } CPU_state;
 
