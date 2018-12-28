@@ -1,6 +1,7 @@
 #include <am.h>
 #include <amdev.h>
 #include <stdio.h>
+#include <ndl.h>
 
 void timer_init();
 void vga_init();
@@ -19,6 +20,7 @@ static _Device devices[] = {
 
 int _ioe_init() {
   printf("ioe test\n");
+  NDL_OpenDisplay(400, 300);
   timer_init();
   vga_init();
   return 0;
