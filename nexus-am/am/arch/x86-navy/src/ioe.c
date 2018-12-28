@@ -19,7 +19,6 @@ static _Device devices[] = {
 };
 
 int _ioe_init() {
-  printf("ioe test\n");
   NDL_OpenDisplay(400, 300);
   timer_init();
   vga_init();
