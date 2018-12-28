@@ -23,19 +23,19 @@ void init_proc() {
   // naive_uload(NULL, "/bin/init");
   // context_kload(&pcb[0], (void *)hello_fun);
   // context_uload(&pcb[0], "/bin/pal");
-  context_uload(&pcb[0], "/bin/hello");
+  context_uload(&pcb[0], "/bin/hello-am");
   // context_uload(&pcb[0], "/bin/init");
-  context_uload(&pcb[1], "/bin/pal");
+  // context_uload(&pcb[1], "/bin/pal");
   // context_uload(&pcb[0], "/bin/dummy");
   switch_boot_pcb();
 }
 
-static uint8_t count = 0;
+// static uint8_t count = 0;
 _Context* schedule(_Context *prev) {
   current->cp = prev;
-  // current = &pcb[0];
+  current = &pcb[0];
   // current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
-  current = count == 0 ? &pcb[0] : &pcb[1];
-  count++;
+  // current = count == 0 ? &pcb[0] : &pcb[1];
+  // count++;
   return current->cp;
 }
