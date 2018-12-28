@@ -4,14 +4,11 @@
 extern int main();
 
 void _trm_init() {
-    int ret = main();
-    printf("test\n");
-    _halt(ret);
+    main();
 }
 
 void _putc(char ch) {
     putchar(ch);
-    putchar('x');
 }
 
 void _halt(int code) {
