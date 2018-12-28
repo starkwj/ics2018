@@ -36,7 +36,6 @@ int read_key() {
   _KbdReg key;
   dev->read(_DEVREG_INPUT_KBD, &key, sizeof(_KbdReg));
   int ret = key.keycode;
-  printf("ret=%x\n", ret);
   if (key.keydown) ret |= 0x8000;
   return ret;
 }
