@@ -5,6 +5,7 @@ extern int main();
 
 void _trm_init() {
     int ret = main();
+    printf("test\n");
     _halt(ret);
 }
 
