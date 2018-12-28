@@ -44,6 +44,7 @@ bool keyboard_event() {
   if ((keycode & KEYDOWN_MASK) != 0) {
     key_code = keycode & ~KEYDOWN_MASK;
     press_key(key_code);
+    printf("keycode=%d\n", keycode);
     return true;
   }
   else {
