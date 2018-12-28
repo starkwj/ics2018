@@ -11,6 +11,7 @@ void _trm_init() {
 
 void _putc(char ch) {
     putchar(ch);
+    putchar('x');
 }
 
 void _halt(int code) {
