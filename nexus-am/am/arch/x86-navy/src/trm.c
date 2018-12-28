@@ -4,6 +4,7 @@
 
 extern int main();
 void _trm_init() {
+    printf("test\n");
     int ret = main();
     _halt(ret);
 }
