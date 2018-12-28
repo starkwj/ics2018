@@ -41,10 +41,10 @@ bool keyboard_event() {
   int keycode = read_key();
   if ((keycode & ~KEYDOWN_MASK) == _KEY_NONE) return false;
 
+    printf("keycode=%x\n", keycode);
   if ((keycode & KEYDOWN_MASK) != 0) {
     key_code = keycode & ~KEYDOWN_MASK;
     press_key(key_code);
-    printf("keycode=%d\n", keycode);
     return true;
   }
   else {
