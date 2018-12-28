@@ -29,7 +29,7 @@ int main (){
       next_refresh += 1000 / FPS;
     }
     next_frame += 1000 / HZ;
-    printf("test1\n");
+
     while (keyboard_event());
     printf("test2\n");
     while (update_keypress());
