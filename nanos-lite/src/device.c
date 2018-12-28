@@ -31,6 +31,15 @@ size_t events_read(void *buf, size_t offset, size_t len) {
   }
   else {
     sprintf(buf, "k%c %s\n", (key & KEYDOWN_MASK) == 0 ? 'u' : 'd', keyname[key & (~KEYDOWN_MASK)]);
+    // if ((key & (~KEYDOWN_MASK)) == _KEY_F1) {
+
+    // }
+    // else if ((key & (~KEYDOWN_MASK)) == _KEY_F2) {
+
+    // }
+    // else if ((key & (~KEYDOWN_MASK)) == _KEY_F3) {
+
+    // }
   }
   return strlen(buf);
 }
