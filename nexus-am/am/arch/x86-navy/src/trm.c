@@ -4,7 +4,9 @@
 extern int main();
 
 void _trm_init() {
+    printf("t\n");
     main();
+    printf("test\n");
 }
 
 void _putc(char ch) {
