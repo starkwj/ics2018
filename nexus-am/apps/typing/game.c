@@ -20,6 +20,7 @@ int main (){
 
     while (1) {
       time = uptime();
+      printf("uptime\n");
       if (time >= next_frame) break;
     }
     frames ++;
