@@ -27,7 +27,6 @@ void init_proc() {
   context_uload(&pcb[1], "/bin/pal");
   // context_uload(&pcb[0], "/bin/dummy");
   // context_uload(&pcb[0], "/bin/pal");
-  printf("load over\n");
   switch_boot_pcb();
 }
 
