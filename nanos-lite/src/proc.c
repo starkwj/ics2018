@@ -23,7 +23,7 @@ void init_proc() {
   // naive_uload(NULL, "/bin/init");
   // context_kload(&pcb[0], (void *)hello_fun);
   // context_uload(&pcb[0], "/bin/pal");
-  context_uload(&pcb[0], "/bin/hello-am");
+  context_uload(&pcb[0], "/bin/slider-am");
   // context_uload(&pcb[0], "/bin/init");
   // context_uload(&pcb[1], "/bin/pal");
   // context_uload(&pcb[0], "/bin/dummy");

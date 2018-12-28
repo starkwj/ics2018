@@ -1,12 +1,11 @@
 #include <am.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 extern int main();
-
 void _trm_init() {
-    printf("t\n");
-    main();
-    printf("test\n");
+    int ret = main();
+    _halt(ret);
 }
 
 void _putc(char ch) {
@@ -14,7 +13,8 @@ void _putc(char ch) {
 }
 
 void _halt(int code) {
-    while (1);
+    printf("Exit (%d)\n", code);
+    exit(code);
 }
 
 _Area _heap;
