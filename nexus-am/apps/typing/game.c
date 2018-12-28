@@ -20,7 +20,6 @@ int main (){
 
     while (1) {
       time = uptime();
-      printf("uptime\n");
       if (time >= next_frame) break;
     }
     frames ++;
@@ -31,9 +30,7 @@ int main (){
     next_frame += 1000 / HZ;
 
     while (keyboard_event());
-    printf("test2\n");
     while (update_keypress());
-     printf("test3\n");
     if (frames % (HZ / CHARACTER_PER_SECOND) == 0) {
       create_new_letter();
     }
