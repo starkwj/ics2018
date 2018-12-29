@@ -32,6 +32,7 @@ struct MenuItem {
   {"hello", "/bin/hello", NULL},
   {"text", "/bin/text", NULL},
   {"slider-am", "/bin/slider-am", NULL},
+  {"videotest-am", "/bin/videotest-am", NULL},
 };
 
 #define nitems (sizeof(items) / sizeof(items[0]))
