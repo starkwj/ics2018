@@ -25,9 +25,9 @@ void init_proc() {
   // context_kload(&pcb[0], (void *)hello_fun);
   context_uload(&pcb[0], "/bin/hello");
   fg_pcb = 1;
-  context_uload(&pcb[1], "/bin/init");
-  // context_uload(&pcb[2], "/bin/videotest-am");
-  // context_uload(&pcb[3], "/bin/pal");
+  context_uload(&pcb[1], "/bin/pal");
+  context_uload(&pcb[2], "/bin/videotest-am");
+  context_uload(&pcb[3], "/bin/pal");
   // context_uload(&pcb[0], "/bin/dummy");
   switch_boot_pcb();
 }
