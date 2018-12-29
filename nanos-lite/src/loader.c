@@ -65,6 +65,8 @@ void context_uload(PCB *pcb, const char *filename) {
   _protect(&pcb->as);
   printf("after _protect\n");
   printf("location of loader:%x\n", loader);
+  printf("pcb=%x\n", pcb);
+  printf("filename=%x\n", filename);
   uintptr_t entry = loader(pcb, filename);
 
   _Area stack;
