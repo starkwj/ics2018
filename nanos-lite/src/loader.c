@@ -32,6 +32,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
       }
       p = new_page(1);
       _map(&pcb->as, v, p, 0);
+      printf("v -> p : %x -> %x\n", v, p);
       fs_read(fd, p, sz & PGMASK);
     }
     pcb->cur_brk = pcb->max_brk = DEFAULT_ENTRY + sz;
