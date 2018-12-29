@@ -24,6 +24,7 @@ long sys_write(int fd, const void *buf, size_t count) {
 int sys_execve(const char *filename, char *const argv[], char *const envp[]) {
   // naive_uload(NULL, filename);
   context_uload(current, filename);
+  reset_page();
   printf("sys_execve: %s over\n", filename);
   return 0;
 }
