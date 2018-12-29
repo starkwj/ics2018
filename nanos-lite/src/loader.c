@@ -62,6 +62,7 @@ void context_kload(PCB *pcb, void *entry) {
 }
 
 void context_uload(PCB *pcb, const char *filename) {
+  printf("filename=%s  %x\n", filename, filename);
   _protect(&pcb->as);
   printf("after _protect\n");
   printf("location of loader:%x\n", loader);
