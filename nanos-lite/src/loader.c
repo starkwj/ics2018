@@ -56,6 +56,7 @@ void context_kload(PCB *pcb, void *entry) {
 }
 
 void context_uload(PCB *pcb, const char *filename) {
+  printf("filename : %s %x\n", filename, filename);
   char name[128];
   strcpy(name, filename);
   _protect(&pcb->as);
