@@ -16,8 +16,10 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   //   fs_close(fd);
   // }
   // return DEFAULT_ENTRY;
-
+    printf("filename:%s\n", filename);
     printf("t1\n");
+    printf("location of fs_open = %x\n", fs_open);
+
   int fd = fs_open(filename, 0, 0);
   if (fd >= 0) {
     uint32_t sz = fs_filesz(fd);
