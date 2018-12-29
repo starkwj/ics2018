@@ -16,9 +16,9 @@ void free_page(void *p) {
 }
 
 void reset_page() {
-  size_t sz = pf - (void *)PGROUNDUP((uintptr_t)_heap.start);
+  // size_t sz = pf - (void *)PGROUNDUP((uintptr_t)_heap.start);
   pf = (void *)PGROUNDUP((uintptr_t)_heap.start);
-  memset(pf, 0, sz);
+  // memset(pf, 0, sz);
   printf("reset_page : pf = %x\n", pf);
 }
 
