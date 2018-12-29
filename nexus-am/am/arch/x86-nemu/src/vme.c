@@ -1,4 +1,5 @@
 #include <x86.h>
+#include <klib.h>
 
 #define PG_ALIGN __attribute((aligned(PGSIZE)))
 
@@ -41,6 +42,7 @@ int _vme_init(void* (*pgalloc_f)(size_t), void (*pgfree_f)(void*)) {
       }
     }
   }
+  printf("kpdirs=%x\n", kpdirs);
   set_cr3(kpdirs);
   set_cr0(get_cr0() | CR0_PG);
 
@@ -55,7 +57,7 @@ int _protect(_Protect *p) {
   for (int i = 0; i < NR_PDE; i ++) {
     updir[i] = kpdirs[i];
   }
-
+  printf("updir=%x\n", updir);
   p->area.start = (void*)0x8000000;
   p->area.end = (void*)0xc0000000;
   return 0;
