@@ -17,9 +17,9 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   // }
   // return DEFAULT_ENTRY;
 
+    printf("t1\n");
   int fd = fs_open(filename, 0, 0);
   if (fd >= 0) {
-    printf("t1\n");
     uint32_t sz = fs_filesz(fd);
     printf("t2\n");
     if (sz > 0) {
