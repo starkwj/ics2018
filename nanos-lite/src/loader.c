@@ -27,17 +27,14 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
       int i;
       for (i = 0; i < pg_num - 1; i++, v += PGSIZE) {
         p = new_page(1);
-        printf("v -> p : %x -> %x\n", v, p);
         _map(&pcb->as, v, p, 0);
         fs_read(fd, p, PGSIZE);
       }
       p = new_page(1);
-      printf("v -> p : %x -> %x\n", v, p);
       _map(&pcb->as, v, p, 0);
       fs_read(fd, p, sz & PGMASK);
     }
     pcb->cur_brk = pcb->max_brk = DEFAULT_ENTRY + sz;
-    printf("cur_brk = %x\n", pcb->cur_brk);
     fs_close(fd);
   }
   return DEFAULT_ENTRY;
