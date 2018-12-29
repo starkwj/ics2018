@@ -21,12 +21,11 @@ long sys_write(int fd, const void *buf, size_t count) {
   return i;
 }
 
-int sys_execve(const char *filename, char *const argv[], char *const envp[]) {
+_Context * sys_execve(const char *filename, char *const argv[], char *const envp[]) {
   // naive_uload(NULL, filename);
-  printf("sys_execve:%s  %x\n", filename, filename);
   reset_page();
   context_uload(current, filename);
-  return 0;
+  return current->cp;
 }
 
 _Context* do_syscall(_Context *c) {
@@ -37,11 +36,13 @@ _Context* do_syscall(_Context *c) {
   a[3] = c->GPR4;
 
   switch (a[0]) {
-    case SYS_exit:
-      _halt(a[1]);
-      // sys_execve("/bin/init", NULL, NULL);
+    case SYS_exit: {
+      // _halt(a[1]);
+      _Context *nc = sys_execve("/bin/init", NULL, NULL);
+      memcpy(c, nc, sizeof(_Context));
       c->GPRx = 0;
       break;
+    }
     case SYS_yield:
       _yield();
       c->GPRx = 0;
@@ -63,13 +64,13 @@ _Context* do_syscall(_Context *c) {
     case SYS_brk:
       c->GPRx = mm_brk(a[1]);
       break;
-    case SYS_execve:
-      sys_execve((const char *)a[1], (char *const *)a[2], (char *const *)a[3]);
-      c = current->cp;
-      // _yield();
-      printf("test\n");
+    case SYS_execve: {
+      _Context *nc = sys_execve((const char *)a[1], (char *const *)a[2], (char *const *)a[3]);
+      printf("c=%x  nc=%x\n", c, nc);
+      memcpy(c, nc, sizeof(_Context));  // important: cover the context
       c->GPRx = 0;
       break;
+    }
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
 
