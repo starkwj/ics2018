@@ -65,7 +65,7 @@ _Context* do_syscall(_Context *c) {
       break;
     case SYS_execve:
       sys_execve((const char *)a[1], (char *const *)a[2], (char *const *)a[3]);
-      // _yield();
+      _yield();
       printf("test\n");
       c->GPRx = 0;
       break;

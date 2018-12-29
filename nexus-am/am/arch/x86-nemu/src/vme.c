@@ -99,7 +99,6 @@ _Context *_ucontext(_Protect *p, _Area ustack, _Area kstack, void *entry, void *
   ustack.end -= 1 * sizeof(uintptr_t);  // 1 = retaddr
   uintptr_t ret = (uintptr_t)ustack.end;
   *(uintptr_t *)ret = 0;
-  
   _Context *c = (_Context*)ustack.end - 1;
   c->cs = 8;
   c->eip = (uintptr_t)entry;

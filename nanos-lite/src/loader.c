@@ -60,15 +60,11 @@ void context_kload(PCB *pcb, void *entry) {
 void context_uload(PCB *pcb, const char *filename) {
   char name[128];
   strcpy(name, filename);
-  printf("&pcb=%x\n", pcb);
   _protect(&pcb->as);
   uintptr_t entry = loader(pcb, name);
   _Area stack;
   stack.start = pcb->stack;
   stack.end = stack.start + sizeof(pcb->stack);
-  printf("&pcb=%x\n", pcb);
-  printf("&stack=%x\n", &stack);
-  printf("entry=%x\n", entry);
+
   pcb->cp = _ucontext(&pcb->as, stack, stack, (void *)entry, NULL);
-  printf("&pcb=%x\n", pcb);
 }
