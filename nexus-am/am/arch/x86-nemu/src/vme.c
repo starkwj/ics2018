@@ -50,6 +50,7 @@ int _vme_init(void* (*pgalloc_f)(size_t), void (*pgfree_f)(void*)) {
 }
 
 int _protect(_Protect *p) {
+  printf("p=%x\n", p);
   PDE *updir = (PDE*)(pgalloc_usr(1));
   p->pgsize = 4096;
   p->ptr = updir;
