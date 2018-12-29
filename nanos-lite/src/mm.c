@@ -15,6 +15,12 @@ void free_page(void *p) {
   pf -= PGSIZE;
 }
 
+void reset_page() {
+  size_t sz = pf - (void *)PGROUNDUP((uintptr_t)_heap.start);
+  pf = (void *)PGROUNDUP((uintptr_t)_heap.start);
+  memset(pf, 0, sz);
+}
+
 /* The brk() system call handler. */
 int mm_brk(uintptr_t new_brk) {
   if (new_brk > current->max_brk) {
