@@ -53,11 +53,11 @@ int _protect(_Protect *p) {
   PDE *updir = (PDE*)(pgalloc_usr(1));
   p->pgsize = 4096;
   p->ptr = updir;
+  printf("updir=%x\n", updir);
   // map kernel space
   for (int i = 0; i < NR_PDE; i ++) {
     updir[i] = kpdirs[i];
   }
-  printf("updir=%x\n", updir);
   p->area.start = (void*)0x8000000;
   p->area.end = (void*)0xc0000000;
   return 0;
