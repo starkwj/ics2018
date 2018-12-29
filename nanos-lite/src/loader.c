@@ -27,6 +27,9 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
       int i;
       for (i = 0; i < pg_num - 1; i++, v += PGSIZE) {
         p = new_page(1);
+        if (i == 0) {
+          printf("load %s: 1st page = %x\n", filename, p);
+        }
         _map(&pcb->as, v, p, 0);
         fs_read(fd, p, PGSIZE);
       }
