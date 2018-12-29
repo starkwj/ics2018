@@ -59,12 +59,12 @@ size_t fs_filesz(int fd) {
 }
 
 int fs_open(const char *pathname, int flags, int mode) {
+  printf("fs_open: %s\n", pathname);
   int i;
   for (i = 0; i < NR_FILES; i++) {
     printf("test %d  pathname:%x  filetable[i]name%x\n", i, pathname, file_table[i].name);
     if (!strcmp(pathname, file_table[i].name)) {
       file_table[i].open_offset = 0;
-      printf("fs_open: %s\n", pathname);
       return i;
     }
   }
