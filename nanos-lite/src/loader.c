@@ -63,10 +63,13 @@ void context_kload(PCB *pcb, void *entry) {
 
 void context_uload(PCB *pcb, const char *filename) {
   printf("filename=%s  %x\n", filename, filename);
+  const char *name = filename;
+  printf("name=%s  %x\n", name, name);
   printf("pcb->ptr:%x\n", pcb->as.ptr);
   printf("pcb=%x\n", pcb);
   _protect(&pcb->as);
   printf("after _protect\n");
+  printf("name=%s  %x\n", name, name);
   printf("location of loader:%x\n", loader);
   printf("filename=%s  %x\n", filename, filename);
   uintptr_t entry = loader(pcb, filename);
