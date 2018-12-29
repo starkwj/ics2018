@@ -19,9 +19,7 @@ void free_page(void *p) {
 void reset_page() {
   size_t sz = pf - (void *)PGROUNDUP((uintptr_t)_heap.start);
   pf = (void *)PGROUNDUP((uintptr_t)_heap.start);
-  printf("memset:%x\n", memset);
   memset(pf, 0, sz);
-  printf("reset_page : sz = %x, pf = %x  &sz=%x  &pf=%x\n", sz, pf, &sz, &pf);
 }
 
 /* The brk() system call handler. */

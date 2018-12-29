@@ -56,11 +56,8 @@ void context_kload(PCB *pcb, void *entry) {
 }
 
 void context_uload(PCB *pcb, const char *filename) {
-  printf("filename : %s %x\n", filename, filename);
-  char name[128];
-  strcpy(name, filename);
   _protect(&pcb->as);
-  uintptr_t entry = loader(pcb, name);
+  uintptr_t entry = loader(pcb, filename);
   _Area stack;
   stack.start = pcb->stack;
   stack.end = stack.start + sizeof(pcb->stack);
