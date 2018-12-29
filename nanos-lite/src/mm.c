@@ -16,9 +16,10 @@ void free_page(void *p) {
 }
 
 void reset_page() {
-  size_t sz = pf - (void *)PGROUNDUP((uintptr_t)_heap.start);
+  // size_t sz = pf - (void *)PGROUNDUP((uintptr_t)_heap.start);
   pf = (void *)PGROUNDUP((uintptr_t)_heap.start);
-  memset(pf, 0, sz);
+  // memset(pf, 0, sz);
+  printf("reset_page : pf = %x\n", pf);
 }
 
 /* The brk() system call handler. */
@@ -26,8 +27,10 @@ int mm_brk(uintptr_t new_brk) {
   if (new_brk > current->max_brk) {
     uintptr_t va = (current->max_brk & ~0xfff) + PGSIZE;
     uintptr_t newpf = new_brk & ~0xfff;
+    // printf("mm_brk: va=%x new_brk=%x\n", va, newpf);
     while (va <= newpf) {
       void *pa = new_page(1);
+      // printf("mm_brk va -> pa : %x -> %x\n", va, pa);
       _map(&current->as, (void *)va, pa, 0);
       va += PGSIZE;
     }
