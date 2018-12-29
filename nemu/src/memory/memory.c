@@ -63,6 +63,9 @@ paddr_t page_translate(vaddr_t vaddr, bool write) {
     assert(ppde->present);
     ppde->accessed = 1;
     PTE *ppte = guest_to_host((ppde->val & ~0xfff) + (PTX(vaddr) << 2));
+    if (ppde->present == 0) {
+      printf("va=%x  cr3=%x  ppte=%p\n", vaddr, cpu.cr3.val, ppte);
+    }
     assert(ppte->present);
     ppte->accessed = 1;
     if (write) {
