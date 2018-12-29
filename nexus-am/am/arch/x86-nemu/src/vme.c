@@ -43,6 +43,7 @@ int _vme_init(void* (*pgalloc_f)(size_t), void (*pgfree_f)(void*)) {
     }
   }
   printf("kpdirs=%x\n", kpdirs);
+  printf("kpdirs[32]=%x\n", kpdirs[32]);
   set_cr3(kpdirs);
   set_cr0(get_cr0() | CR0_PG);
 
@@ -56,6 +57,7 @@ int _protect(_Protect *p) {
   p->pgsize = 4096;
   p->ptr = updir;
   printf("updir=%x\n", updir);
+  printf("kpdirs[32]=%x\n", kpdirs[32]);
   // map kernel space
   for (int i = 0; i < NR_PDE; i ++) {
     updir[i] = kpdirs[i];
