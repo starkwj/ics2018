@@ -19,7 +19,9 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 
   int fd = fs_open(filename, 0, 0);
   if (fd >= 0) {
+    printf("t1\n");
     uint32_t sz = fs_filesz(fd);
+    printf("t2\n");
     if (sz > 0) {
       int pg_num = (sz - 1) / PGSIZE + 1;
       void *v = (void *)DEFAULT_ENTRY;
