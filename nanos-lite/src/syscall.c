@@ -68,8 +68,8 @@ _Context* do_syscall(_Context *c) {
       c->GPRx = mm_brk(a[1]);
       break;
     case SYS_execve: {
+      printf("\nexecve:!\n\n");
       _Context *nc = sys_execve((const char *)a[1], (char *const *)a[2], (char *const *)a[3]);
-      printf("c=%x  nc=%x\n", c, nc);
       memcpy(c, nc, sizeof(_Context));  // important: cover the context
       c->GPRx = 0;
       break;
