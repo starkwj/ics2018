@@ -66,6 +66,7 @@ _Context* do_syscall(_Context *c) {
     case SYS_execve:
       sys_execve((const char *)a[1], (char *const *)a[2], (char *const *)a[3]);
       // _yield();
+      printf("test\n");
       c->GPRx = 0;
       break;
     default: panic("Unhandled syscall ID = %d", a[0]);
