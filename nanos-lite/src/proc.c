@@ -24,11 +24,11 @@ void init_proc() {
   // naive_uload(NULL, "/bin/init");
   // context_kload(&pcb[0], (void *)hello_fun);
   context_uload(&pcb[0], "/bin/hello");
+  fg_pcb = 1;
   context_uload(&pcb[1], "/bin/init");
   context_uload(&pcb[2], "/bin/slider-am");
   context_uload(&pcb[3], "/bin/pal");
   // context_uload(&pcb[0], "/bin/dummy");
-  fg_pcb = 0;
   switch_boot_pcb();
 }
 
