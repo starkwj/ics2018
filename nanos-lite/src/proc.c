@@ -23,7 +23,7 @@ void hello_fun(void *arg) {
 void init_proc() {
   // naive_uload(NULL, "/bin/init");
   // context_kload(&pcb[0], (void *)hello_fun);
-  context_uload(&pcb[0], "/bin/videotest-am");
+  context_uload(&pcb[0], "/bin/init");
   fg_pcb = 0;
   // context_uload(&pcb[1], "/bin/init");
   // context_uload(&pcb[2], "/bin/videotest-am");
