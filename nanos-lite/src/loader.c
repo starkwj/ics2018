@@ -63,7 +63,8 @@ void context_kload(PCB *pcb, void *entry) {
 
 void context_uload(PCB *pcb, const char *filename) {
   printf("filename=%s  %x\n", filename, filename);
-  const char *name = filename;
+  char name[128];
+  strcpy(name, filename);
   printf("name=%s  %x\n", name, name);
   printf("pcb->ptr:%x\n", pcb->as.ptr);
   printf("pcb=%x\n", pcb);
