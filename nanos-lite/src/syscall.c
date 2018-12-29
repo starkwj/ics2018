@@ -26,7 +26,6 @@ int sys_execve(const char *filename, char *const argv[], char *const envp[]) {
   printf("sys_execve:%s  %x\n", filename, filename);
   reset_page();
   context_uload(current, filename);
-  printf("sys_execve: %s over\n", filename);
   return 0;
 }
 
