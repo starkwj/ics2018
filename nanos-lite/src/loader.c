@@ -16,14 +16,10 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   //   fs_close(fd);
   // }
   // return DEFAULT_ENTRY;
-    printf("filename:%s\n", filename);
-    printf("t1\n");
-    printf("location of fs_open = %x\n", fs_open);
 
   int fd = fs_open(filename, 0, 0);
   if (fd >= 0) {
     uint32_t sz = fs_filesz(fd);
-    printf("t2\n");
     if (sz > 0) {
       int pg_num = (sz - 1) / PGSIZE + 1;
       void *v = (void *)DEFAULT_ENTRY;
@@ -64,11 +60,13 @@ void context_kload(PCB *pcb, void *entry) {
 void context_uload(PCB *pcb, const char *filename) {
   char name[128];
   strcpy(name, filename);
+  printf("&pcb=%x\n", pcb);
   _protect(&pcb->as);
   uintptr_t entry = loader(pcb, name);
   _Area stack;
   stack.start = pcb->stack;
   stack.end = stack.start + sizeof(pcb->stack);
-
+  printf("&pcb=%x\n", pcb);
   pcb->cp = _ucontext(&pcb->as, stack, stack, (void *)entry, NULL);
+  printf("&pcb=%x\n", pcb);
 }
