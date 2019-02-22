@@ -14,5 +14,7 @@
 #define PGROUNDDOWN(a)  (((a)) & ~PGMASK)
 
 void* new_page(size_t);
+void free_page(void *p);
+void reset_page();
 
 #endif

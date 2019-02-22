@@ -1,4 +1,5 @@
 #include <x86.h>
+#include <klib.h>
 
 #define PG_ALIGN __attribute((aligned(PGSIZE)))
 
@@ -56,13 +57,13 @@ int _protect(_Protect *p) {
   for (int i = 0; i < NR_PDE; i ++) {
     updir[i] = kpdirs[i];
   }
-
   p->area.start = (void*)0x8000000;
   p->area.end = (void*)0xc0000000;
   return 0;
 }
 
 void _unprotect(_Protect *p) {
+  pgfree_usr(p->ptr);
 }
 
 static _Protect *cur_as = NULL;
@@ -71,14 +72,34 @@ void get_cur_as(_Context *c) {
 }
 
 void _switch(_Context *c) {
+  if (c->prot == NULL) {
+    return;
+  }
   set_cr3(c->prot->ptr);
   cur_as = c->prot;
 }
 
 int _map(_Protect *p, void *va, void *pa, int mode) {
+  PDE *updir = p->ptr;
+  PDE pde = updir[PDX(va)];
+  if ((pde & PTE_P) == 0) {
+    // malloc a new page for page-table
+    pde = (PDE)(pgalloc_usr(1)) | PTE_P;
+    updir[PDX(va)] = pde;
+  }
+  PTE *ppte = (PTE *)(PTE_ADDR(pde));
+  ppte[PTX(va)] = PTE_ADDR(pa) | PTE_P | mode;  //??? not clear
   return 0;
 }
 
 _Context *_ucontext(_Protect *p, _Area ustack, _Area kstack, void *entry, void *args) {
-  return NULL;
+  ustack.end -= 1 * sizeof(uintptr_t);  // 1 = retaddr
+  uintptr_t ret = (uintptr_t)ustack.end;
+  *(uintptr_t *)ret = 0;
+  _Context *c = (_Context*)ustack.end - 1;
+  c->cs = 8;
+  c->eip = (uintptr_t)entry;
+  c->eflags = 1 << 9;
+  c->prot = p;
+  return c;
 }

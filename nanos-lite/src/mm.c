@@ -11,12 +11,31 @@ void* new_page(size_t nr_page) {
 }
 
 void free_page(void *p) {
-  panic("not implement yet");
+  panic("not implement yet or no need to implement");
+  pf -= PGSIZE;
+}
+
+void reset_page() {
+  size_t sz = pf - (void *)PGROUNDUP((uintptr_t)_heap.start);
+  pf = (void *)PGROUNDUP((uintptr_t)_heap.start);
+  memset(pf, 0, sz);
 }
 
 /* The brk() system call handler. */
 int mm_brk(uintptr_t new_brk) {
-  
+  if (new_brk > current->max_brk) {
+    uintptr_t va = (current->max_brk & ~0xfff) + PGSIZE;
+    uintptr_t newpf = new_brk & ~0xfff;
+    // printf("mm_brk: va=%x new_brk=%x\n", va, newpf);
+    while (va <= newpf) {
+      void *pa = new_page(1);
+      // printf("mm_brk va -> pa : %x -> %x\n", va, pa);
+      _map(&current->as, (void *)va, pa, 0);
+      va += PGSIZE;
+    }
+    current->max_brk = new_brk;
+  }
+  current->cur_brk = new_brk;
   return 0;
 }
 

@@ -27,6 +27,8 @@ void difftest_setregs(const void *r) {
   union gdb_regs qemu_r;
   gdb_getregs(&qemu_r);
   memcpy(&qemu_r, r, DIFFTEST_REG_SIZE);
+  qemu_r.cr0 = ((const union gdb_regs *)r)->cr0;
+  qemu_r.cr3 = ((const union gdb_regs *)r)->cr3;
   gdb_setregs(&qemu_r);
 }
 

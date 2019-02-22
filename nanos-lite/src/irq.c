@@ -1,21 +1,14 @@
 #include "common.h"
 
-// enum {
-//   _EVENT_NULL = 0,
-//   _EVENT_ERROR,
-//   _EVENT_IRQ_TIMER,
-//   _EVENT_IRQ_IODEV,
-//   _EVENT_PAGEFAULT,
-//   _EVENT_YIELD,
-//   _EVENT_SYSCALL,
-// };
 extern _Context* do_syscall(_Context *c);
+extern _Context* schedule(_Context *prev);
 
 static _Context* do_event(_Event e, _Context* c) {
   _Context *r = NULL;
   switch (e.event) {
+    case _EVENT_IRQ_TIMER: /*Log("_EVENT_IRQ_TIMER");*/ _yield(); break;
     case _EVENT_SYSCALL: r = do_syscall(c); break;
-    case _EVENT_YIELD: printf("Event Yield ID = %d\n", e.event); break;
+    case _EVENT_YIELD: r = schedule(c); break;
     default: panic("Unhandled event ID = %d", e.event);
   }
 

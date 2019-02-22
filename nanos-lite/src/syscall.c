@@ -3,6 +3,8 @@
 #include "fs.h"
 #include "proc.h"
 
+extern int mm_brk(uintptr_t new_brk);
+
 long sys_write(int fd, const void *buf, size_t count) {
   if (buf == NULL) {
     return -1;
@@ -19,9 +21,13 @@ long sys_write(int fd, const void *buf, size_t count) {
   return i;
 }
 
-int sys_execve(const char *filename, char *const argv[], char *const envp[]) {
-  naive_uload(NULL, filename);
-  return 0;
+_Context * sys_execve(const char *filename, char *const argv[], char *const envp[]) {
+  // naive_uload(NULL, filename);
+  // char name[128];
+  // strcpy(name, filename);
+  // _vme_init(new_page, free_page);
+  context_uload(current, filename);
+  return current->cp;
 }
 
 _Context* do_syscall(_Context *c) {
@@ -32,11 +38,13 @@ _Context* do_syscall(_Context *c) {
   a[3] = c->GPR4;
 
   switch (a[0]) {
-    case SYS_exit:
+    case SYS_exit: {
       // _halt(a[1]);
-      sys_execve("/bin/init", NULL, NULL);
+      _Context *nc = sys_execve("/bin/init", NULL, NULL);
+      memcpy(c, nc, sizeof(_Context));
       c->GPRx = 0;
       break;
+    }
     case SYS_yield:
       _yield();
       c->GPRx = 0;
@@ -56,11 +64,14 @@ _Context* do_syscall(_Context *c) {
       c->GPRx = fs_lseek(a[1], a[2], a[3]);
       break;
     case SYS_brk:
+      c->GPRx = mm_brk(a[1]);
+      break;
+    case SYS_execve: {
+      _Context *nc = sys_execve((const char *)a[1], (char *const *)a[2], (char *const *)a[3]);
+      memcpy(c, nc, sizeof(_Context));  // important: cover the context
       c->GPRx = 0;
       break;
-    case SYS_execve:
-      sys_execve((const char *)a[1], (char *const *)a[2], (char *const *)a[3]);
-      break;
+    }
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
 

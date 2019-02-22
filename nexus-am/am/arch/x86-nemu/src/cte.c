@@ -6,8 +6,12 @@ static _Context* (*user_handler)(_Event, _Context*) = NULL;
 void vectrap();
 void vecnull();
 void vecsys();
+void irq0();
 
+extern void get_cur_as(_Context *c);
+extern void _switch(_Context *c);
 _Context* irq_handle(_Context *tf) {
+  get_cur_as(tf);
   _Context *next = tf;
   // printf("eax: %x ecx: %x esi:%x edi:%x\n", tf->eax, tf->ecx, tf->esi, tf->edi);
   // printf("irq: %x\n", tf->irq);
@@ -15,6 +19,7 @@ _Context* irq_handle(_Context *tf) {
   if (user_handler) {
     _Event ev = {0};
     switch (tf->irq) {
+      case 0x20: ev.event = _EVENT_IRQ_TIMER; break;
       case 0x80: ev.event = _EVENT_SYSCALL; break;
       case 0x81: ev.event = _EVENT_YIELD; break;
       default: ev.event = _EVENT_ERROR; break;
@@ -25,7 +30,7 @@ _Context* irq_handle(_Context *tf) {
       next = tf;
     }
   }
-
+  _switch(next);
   return next;
 }
 
@@ -38,6 +43,7 @@ int _cte_init(_Context*(*handler)(_Event, _Context*)) {
   }
 
   // -------------------- system call --------------------------
+  idt[0x20] = GATE(STS_TG32, KSEL(SEG_KCODE), irq0, DPL_KERN);
   idt[0x80] = GATE(STS_TG32, KSEL(SEG_KCODE), vecsys, DPL_KERN);
   idt[0x81] = GATE(STS_TG32, KSEL(SEG_KCODE), vectrap, DPL_KERN);
 
@@ -50,7 +56,10 @@ int _cte_init(_Context*(*handler)(_Event, _Context*)) {
 }
 
 _Context *_kcontext(_Area stack, void (*entry)(void *), void *arg) {
-  return NULL;
+  _Context *cp = (_Context *)stack.end - 1;
+  cp->eip = (uintptr_t)entry;
+  cp->cs = 8;
+  return cp;
 }
 
 void _yield() {
